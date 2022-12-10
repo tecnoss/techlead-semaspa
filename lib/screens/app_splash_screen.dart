@@ -34,13 +34,13 @@ class _AppSplashScreenState extends State<AppSplashScreen>
   void init() async {
     Timer(const Duration(milliseconds: 600), () {
       setState(() {
-        boxColor = Colors.red;
+        boxColor = const Color(0xff0056a3);
         _a = true;
       });
     });
     Timer(const Duration(milliseconds: 1500), () {
       setState(() {
-        boxColor = Colors.black;
+        boxColor = const Color(0xff0056a3);
         _c = true;
       });
     });
@@ -60,7 +60,7 @@ class _AppSplashScreenState extends State<AppSplashScreen>
           Tween<double>(begin: 0.0, end: 12).animate(scaleController!);
 
       setState(() {
-        boxColor = Colors.yellow;
+        boxColor = const Color.fromARGB(255, 54, 42, 177);
         _d = true;
       });
     });
@@ -132,7 +132,7 @@ class _AppSplashScreenState extends State<AppSplashScreen>
                             child: Container(
                               decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Colors.orange,
+                                color: Color(0xff0056a3),
                               ),
                             ),
                           ),
@@ -141,8 +141,11 @@ class _AppSplashScreenState extends State<AppSplashScreen>
                     )
                   : Center(
                       child: _e
-                          ? Image.asset('images/app_icon-removebg.png',
-                              height: 130, width: 130, fit: BoxFit.cover)
+                          ? Text(
+                              "SEMAS",
+                              style:
+                                  boldTextStyle(size: 30, color: Colors.white),
+                            )
                           : const SizedBox(),
                     ),
             ),
