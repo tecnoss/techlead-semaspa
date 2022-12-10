@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:semasma/screens/app_splash_screen.dart';
+import 'package:semasma/utils/app_theme.dart';
 
+import 'screens/home_screen.dart';
 import 'utils/app_constant.dart';
 
 void main() async {
@@ -12,6 +14,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+  final bool darkTheme = false;
 
   // This widget is the root of your application.
   @override
@@ -19,13 +22,23 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: '$appName${!isMobile ? ' ${platformName()}' : ''}',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        iconTheme: const IconThemeData(
-          color: Colors.red,
-        ),
-      ),
-      home: const AppSplashScreen(),
+      theme: AppThemeData.lightTheme,
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case '/':
+            return MaterialPageRoute(
+              builder: (context) => const AppSplashScreen(),
+            );
+          case '/home':
+            return MaterialPageRoute(
+              builder: (context) => const HomeScreen(),
+            );
+          default:
+            return MaterialPageRoute(
+              builder: (context) => const AppSplashScreen(),
+            );
+        }
+      },
     );
   }
 }
