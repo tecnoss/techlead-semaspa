@@ -71,6 +71,11 @@ class _AppSplashScreenState extends State<AppSplashScreen>
     afterBuildCreated(() async {
       setValue(appOpenCount, (getIntAsync(appOpenCount)) + 1);
     });
+
+    Timer(const Duration(milliseconds: 4000), () {
+      finish(context);
+      Navigator.pushReplacementNamed(context, '/home');
+    });
   }
 
   @override
