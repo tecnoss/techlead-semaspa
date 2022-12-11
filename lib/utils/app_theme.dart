@@ -19,7 +19,7 @@ class AppThemeData {
     fontFamily: GoogleFonts.openSans().fontFamily,
     appBarTheme: const AppBarTheme(
       color: appColorPrimary,
-      iconTheme: IconThemeData(color: textPrimaryColor),
+      iconTheme: IconThemeData(color: Colors.white),
       systemOverlayStyle:
           SystemUiOverlayStyle(statusBarIconBrightness: Brightness.dark),
     ),

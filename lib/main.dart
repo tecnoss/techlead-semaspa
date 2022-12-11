@@ -4,6 +4,7 @@ import 'package:semasma/screens/app_splash_screen.dart';
 import 'package:semasma/utils/app_theme.dart';
 
 import 'screens/home_screen.dart';
+import 'screens/previsao_tempo.dart';
 import 'utils/app_constant.dart';
 
 void main() async {
@@ -32,6 +33,10 @@ class MyApp extends StatelessWidget {
           case '/home':
             return MaterialPageRoute(
               builder: (context) => const HomeScreen(),
+            );
+          case '/previsao_tempo':
+            return MaterialPageRoute(
+              builder: (context) => const PrevisaoTempo(),
             );
           default:
             return MaterialPageRoute(
