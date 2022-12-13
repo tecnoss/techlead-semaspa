@@ -30,23 +30,28 @@ class _PrevisaoTempoState extends State<PrevisaoTempo> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Row(
-                        children: const [
-                          Icon(Icons.location_on),
-                          Text("REGIÃO METROPOLITANA DE BELÉM"),
-                        ],
-                      ),
-                      const Text("Sexta, 21 de Outubro de 2022"),
-                    ],
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          children: const [
+                            Icon(Icons.location_on),
+                            Text("REGIÃO METROPOLITANA DE BELÉM"),
+                          ],
+                        ),
+                        const Text("Sexta, 21 de Outubro de 2022"),
+                      ],
+                    ),
                   ),
-                  Column(
-                    children: const [
-                      Text("Outras Cidades do Pará"),
-                      Text("Sexta, 21 de Outubro de 2022"),
-                    ],
+                  Expanded(
+                    child: Column(
+                      children: const [
+                        Text("Outras Cidades do Pará"),
+                        Text("Sexta, 21 de Outubro de 2022"),
+                      ],
+                    ),
                   ),
                 ],
               )
