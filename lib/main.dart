@@ -4,7 +4,7 @@ import 'package:semasma/screens/app_splash_screen.dart';
 import 'package:semasma/utils/app_theme.dart';
 
 import 'screens/home_screen.dart';
-import 'screens/previsao_tempo.dart';
+import 'screens/previsao_tempo/previsao_tempo.dart';
 import 'utils/app_constant.dart';
 
 void main() async {
@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: '$appName${!isMobile ? ' ${platformName()}' : ''}',
       theme: AppThemeData.lightTheme,
+      initialRoute: '/',
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/':

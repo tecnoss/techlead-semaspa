@@ -13,47 +13,47 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final List _itens = [
     {
-      "icon": Icons.compost,
+      "icon": "assets/icons/home/semas.png",
       "title": "Conheça a SEMAS",
       "route": "/conheca_semas",
     },
     {
-      "icon": Icons.sunny,
+      "icon": "assets/icons/home/previsao_tempo.png",
       "title": "Previsão do Tempo",
       "route": "/previsao_tempo",
     },
     {
-      "icon": Icons.connect_without_contact,
+      "icon": "assets/icons/home/redes_sociais.png",
       "title": "Redes Sociais",
       "route": "/redes_sociais",
     },
     {
-      "icon": Icons.library_books,
+      "icon": "assets/icons/home/simlam.png",
       "title": "Consultar Processos SIMLAM",
       "route": "/consultar_processos_simlam",
     },
     {
-      "icon": Icons.manage_search,
+      "icon": "assets/icons/home/portal_transparencia.png",
       "title": "Consultar Portal da Transparência",
       "route": "/consultar_portal_transparencia",
     },
     {
-      "icon": Icons.language,
+      "icon": "assets/icons/home/links_uteis.png",
       "title": "Acessar Links Úteis",
       "route": "/acessar_links_uteis",
     },
     {
-      "icon": Icons.announcement,
+      "icon": "assets/icons/home/denuncia_ouvidoria.png",
       "title": "Realizar Denúncias na Ouvidoria",
       "route": "/realizar_denuncias_ouvidoria",
     },
     {
-      "icon": Icons.support_agent,
+      "icon": "assets/icons/home/catis.png",
       "title": "Solicitar Chamados no CATIS",
       "route": "/solicitar_chamados_catis",
     },
     {
-      "icon": Icons.quiz,
+      "icon": "assets/icons/home/faqs.png",
       "title": "FAQs",
       "route": "/faqs",
     },
@@ -106,10 +106,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             Radius.circular(30),
                           ),
                         ),
-                        child: Icon(
-                          _itens[index]["icon"],
-                          size: 40,
-                          color: const Color(0xff0056a3),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Image.asset(
+                            _itens[index]["icon"],
+                            fit: BoxFit.fitHeight,
+                          ),
                         ),
                       ),
                       const SizedBox(

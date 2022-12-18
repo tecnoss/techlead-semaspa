@@ -7,6 +7,7 @@ class BottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 100,
+      margin: const EdgeInsets.only(top: 2),
       width: double.maxFinite,
       decoration: const BoxDecoration(
         color: Color(0xff0056a3),
@@ -28,7 +29,7 @@ class BottomBar extends StatelessWidget {
             ),
           ),
           Image.asset(
-            'images/logo-pa.png',
+            'assets/images/logo-pa.png',
             height: 80,
             width: 80,
           ),
