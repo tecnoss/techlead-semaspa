@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:semasma/widgets/bottom_bar.dart';
+import 'package:semasma/widgets/screen_title.dart';
+import 'package:semasma/widgets/title_app_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,40 +13,49 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final List _itens = [
     {
-      "icon": Icons.compost,
+      "icon": "assets/icons/home/semas.png",
       "title": "Conheça a SEMAS",
+      "route": "/conheca_semas",
     },
     {
-      "icon": Icons.sunny,
+      "icon": "assets/icons/home/previsao_tempo.png",
       "title": "Previsão do Tempo",
+      "route": "/previsao_tempo",
     },
     {
-      "icon": Icons.connect_without_contact,
+      "icon": "assets/icons/home/redes_sociais.png",
       "title": "Redes Sociais",
+      "route": "/redes_sociais",
     },
     {
-      "icon": Icons.library_books,
+      "icon": "assets/icons/home/simlam.png",
       "title": "Consultar Processos SIMLAM",
+      "route": "/consultar_processos_simlam",
     },
     {
-      "icon": Icons.manage_search,
+      "icon": "assets/icons/home/portal_transparencia.png",
       "title": "Consultar Portal da Transparência",
+      "route": "/consultar_portal_transparencia",
     },
     {
-      "icon": Icons.language,
+      "icon": "assets/icons/home/links_uteis.png",
       "title": "Acessar Links Úteis",
+      "route": "/acessar_links_uteis",
     },
     {
-      "icon": Icons.announcement,
+      "icon": "assets/icons/home/denuncia_ouvidoria.png",
       "title": "Realizar Denúncias na Ouvidoria",
+      "route": "/realizar_denuncias_ouvidoria",
     },
     {
-      "icon": Icons.support_agent,
+      "icon": "assets/icons/home/catis.png",
       "title": "Solicitar Chamados no CATIS",
+      "route": "/solicitar_chamados_catis",
     },
     {
-      "icon": Icons.quiz,
+      "icon": "assets/icons/home/faqs.png",
       "title": "FAQs",
+      "route": "/faqs",
     },
   ];
 
@@ -52,28 +63,14 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'SEMAS',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        title: const TitleAppBar(),
+        centerTitle: true,
       ),
+      bottomNavigationBar: const BottomBar(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          16.height,
-          const Text(
-            "SEMAS",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          16.height,
+          const ScreenTitle(title: "SEMAS"),
           const Padding(
             padding: EdgeInsets.only(left: 16.0),
             child: Text(
@@ -93,103 +90,47 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               itemCount: _itens.length,
               itemBuilder: (BuildContext context, int index) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 60,
-                      width: 60,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(30),
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, _itens[index]["route"]);
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 60,
+                        width: 60,
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(30),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Image.asset(
+                            _itens[index]["icon"],
+                            fit: BoxFit.fitHeight,
+                          ),
                         ),
                       ),
-                      child: Icon(
-                        _itens[index]["icon"],
-                        size: 40,
-                        color: const Color(0xff0056a3),
+                      const SizedBox(
+                        height: 10,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      _itens[index]["title"],
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
+                      Text(
+                        _itens[index]["title"],
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 );
               },
             ),
           ),
-          Container(
-            height: 100,
-            width: double.maxFinite,
-            decoration: const BoxDecoration(
-              color: Color(0xff0056a3),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(
-                  width: 100,
-                  child: Text(
-                    "SECRETARIA DE ESTADO DE DESENVOLVIMENTO ECONÔMICO E SOCIAL - SEDESE",
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 4,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Image.asset(
-                  'images/logo-pa.png',
-                  height: 80,
-                  width: 80,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text(
-                      "GOVERNO",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 8,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      "DO ESTADO",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 8,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      "DO PARÁ",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 8,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 100,
-                    )
-                  ],
-                )
-              ],
-            ),
-          )
         ],
       ),
     );
