@@ -5,9 +5,12 @@ class Leading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Icon(
-      Icons.arrow_back,
-      color: Colors.white,
+    return IconButton(
+      onPressed: () => Navigator.of(context).pop(),
+      icon: const Icon(
+        Icons.arrow_back,
+        color: Colors.white,
+      ),
     );
   }
 }
