@@ -6,6 +6,7 @@ import 'package:semasma/utils/app_theme.dart';
 import 'screens/home_screen.dart';
 import 'screens/previsao_tempo/previsao_tempo.dart';
 import 'screens/redes_sociais/redes_sociais_screen.dart';
+import 'screens/simlam/processo_simlam_screen.dart';
 import 'utils/app_constant.dart';
 
 void main() async {
@@ -43,6 +44,10 @@ class MyApp extends StatelessWidget {
           case '/redes_sociais':
             return MaterialPageRoute(
               builder: (context) => const RedesSociaisScreen(),
+            );
+          case '/processo_simlam':
+            return MaterialPageRoute(
+              builder: (context) => const ProcessoSimlamScreen(),
             );
           default:
             return MaterialPageRoute(

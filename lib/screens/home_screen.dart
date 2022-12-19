@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
     {
       "icon": "assets/icons/home/simlam.png",
       "title": "Consultar Processos SIMLAM",
-      "route": "/consultar_processos_simlam",
+      "route": "/processo_simlam",
     },
     {
       "icon": "assets/icons/home/portal_transparencia.png",
