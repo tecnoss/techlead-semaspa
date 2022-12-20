@@ -4,6 +4,7 @@ import 'package:semasma/screens/app_splash_screen.dart';
 import 'package:semasma/utils/app_theme.dart';
 
 import 'screens/home_screen.dart';
+import 'screens/portal_transparencia/portal_transparencia_screen.dart';
 import 'screens/previsao_tempo/previsao_tempo.dart';
 import 'screens/redes_sociais/redes_sociais_screen.dart';
 import 'screens/simlam/processo_simlam_screen.dart';
@@ -48,6 +49,10 @@ class MyApp extends StatelessWidget {
           case '/processo_simlam':
             return MaterialPageRoute(
               builder: (context) => const ProcessoSimlamScreen(),
+            );
+          case '/portal_transparencia':
+            return MaterialPageRoute(
+              builder: (context) => const PortalTransparenciaScreen(),
             );
           default:
             return MaterialPageRoute(
