@@ -4,6 +4,7 @@ import 'package:semasma/screens/app_splash_screen.dart';
 import 'package:semasma/utils/app_theme.dart';
 
 import 'screens/home_screen.dart';
+import 'screens/links_uteis/links_uteis_screen.dart';
 import 'screens/portal_transparencia/portal_transparencia_screen.dart';
 import 'screens/previsao_tempo/previsao_tempo.dart';
 import 'screens/redes_sociais/redes_sociais_screen.dart';
@@ -53,6 +54,10 @@ class MyApp extends StatelessWidget {
           case '/portal_transparencia':
             return MaterialPageRoute(
               builder: (context) => const PortalTransparenciaScreen(),
+            );
+          case '/links_uteis':
+            return MaterialPageRoute(
+              builder: (context) => const LinksUteisScreen(),
             );
           default:
             return MaterialPageRoute(
