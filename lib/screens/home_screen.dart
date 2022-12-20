@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
     {
       "icon": "assets/icons/home/portal_transparencia.png",
       "title": "Consultar Portal da Transparência",
-      "route": "/consultar_portal_transparencia",
+      "route": "/portal_transparencia",
     },
     {
       "icon": "assets/icons/home/links_uteis.png",
