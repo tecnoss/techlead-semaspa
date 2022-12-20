@@ -98,12 +98,12 @@ class _ProcessoSimlamScreenState extends State<ProcessoSimlamScreen> {
               ),
               Container(
                 height: 24,
-                padding: const EdgeInsets.only(left: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 decoration: const BoxDecoration(
                   color: appColorPrimary,
                 ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text(
                       'Itens por página: 10',
@@ -112,24 +112,28 @@ class _ProcessoSimlamScreenState extends State<ProcessoSimlamScreen> {
                         color: Colors.white,
                       ),
                     ),
-                    const Icon(
-                      Icons.chevron_left,
-                      color: Colors.grey,
-                      size: 16,
-                    ),
-                    8.width,
-                    const Text(
-                      '1 - 10 de 65',
-                      style: TextStyle(
-                        fontSize: 10.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                    8.width,
-                    const Icon(
-                      Icons.chevron_right,
-                      color: Colors.white,
-                      size: 16,
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.chevron_left,
+                          color: Colors.grey,
+                          size: 16,
+                        ),
+                        8.width,
+                        const Text(
+                          '1 - 10 de 65',
+                          style: TextStyle(
+                            fontSize: 10.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                        8.width,
+                        const Icon(
+                          Icons.chevron_right,
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                      ],
                     ),
                   ],
                 ),
