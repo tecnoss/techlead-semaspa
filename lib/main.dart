@@ -66,8 +66,12 @@ class MyApp extends StatelessWidget {
               builder: (context) => const DenunciaOuvidoriaScreen(),
             );
           case '/denuncia_ouvidoria/select_denuncia':
+            var args = settings.arguments as SelectDenunciaScreenArguments;
             return MaterialPageRoute(
-              builder: (context) => const SelectDenunciaScreen(),
+              builder: (context) => SelectDenunciaScreen(
+                titleScreen: args.titleScreen,
+                listOptions: args.listOptions,
+              ),
             );
           default:
             return MaterialPageRoute(

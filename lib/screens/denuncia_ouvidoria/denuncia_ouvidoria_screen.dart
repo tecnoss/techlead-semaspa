@@ -5,6 +5,8 @@ import 'package:semasma/widgets/leading.dart';
 import 'package:semasma/widgets/screen_title.dart';
 import 'package:semasma/widgets/title_app_bar.dart';
 
+import 'select_denuncia_screen.dart';
+
 class DenunciaOuvidoriaScreen extends StatefulWidget {
   const DenunciaOuvidoriaScreen({super.key});
 
@@ -27,6 +29,20 @@ class _DenunciaOuvidoriaScreenState extends State<DenunciaOuvidoriaScreen> {
     'Extração de Madeira Ilegal',
     'Extração de Area Ilegal',
     'Descarte Inadequado de Resíduos',
+  ];
+
+  final List<String> _irregularidadesEmpreendimentos = [
+    'Empreendimento Atuando sem CEPROF',
+    'Empresa Atuando sem Licença Ambiental',
+    'Serraria Clandestina',
+    'Carvoaria Irregular',
+    'Terreno Abandonado',
+    'Abastecimento de Balsa em Local Inadequado',
+    'Instalação Irregular de Subestação de Energia Elétrica',
+    'Armazenamento Irregular de Caroço de Açaí',
+    'Comércio Ilegal de Carne Animal',
+    'CAR Irregular',
+    'Sobreposição de CAR',
   ];
 
   @override
@@ -65,21 +81,39 @@ class _DenunciaOuvidoriaScreenState extends State<DenunciaOuvidoriaScreen> {
                     color: Colors.green.shade700,
                     title: 'Crimes Ambientais',
                     onTap: () => Navigator.pushNamed(
-                        context, '/denuncia_ouvidoria/select_denuncia'),
+                      context,
+                      '/denuncia_ouvidoria/select_denuncia',
+                      arguments: SelectDenunciaScreenArguments(
+                        titleScreen: 'Crimes Ambientais',
+                        listOptions: _crimesAmbientaisList,
+                      ),
+                    ),
                   ),
                   _buildCard(
                     icon: Icons.factory,
                     color: Colors.yellow.shade800,
                     title: 'Irregularidade de Empreendimentos',
                     onTap: () => Navigator.pushNamed(
-                        context, '/denuncia_ouvidoria/select_denuncia'),
+                      context,
+                      '/denuncia_ouvidoria/select_denuncia',
+                      arguments: SelectDenunciaScreenArguments(
+                        titleScreen: 'Irregularidade de Empreendimentos',
+                        listOptions: _irregularidadesEmpreendimentos,
+                      ),
+                    ),
                   ),
                   _buildCard(
                     icon: Icons.home_work,
                     color: Colors.blue.shade900,
                     title: 'Irregularidade no Serviço Público',
                     onTap: () => Navigator.pushNamed(
-                        context, '/denuncia_ouvidoria/select_denuncia'),
+                      context,
+                      '/denuncia_ouvidoria/select_denuncia',
+                      arguments: SelectDenunciaScreenArguments(
+                        titleScreen: 'Irregularidade no Serviço Público',
+                        listOptions: _crimesAmbientaisList,
+                      ),
+                    ),
                   ),
                 ],
               ),
