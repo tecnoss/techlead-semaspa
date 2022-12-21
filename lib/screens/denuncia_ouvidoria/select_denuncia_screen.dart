@@ -134,7 +134,8 @@ class _SelectDenunciaScreenState extends State<SelectDenunciaScreen> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              Navigator.pop(context, option);
+                              Navigator.pushNamed(context,
+                                  '/denuncia_ouvidoria/identification');
                             },
                             child: ListTile(
                               title: Text(
