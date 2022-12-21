@@ -14,6 +14,21 @@ class DenunciaOuvidoriaScreen extends StatefulWidget {
 }
 
 class _DenunciaOuvidoriaScreenState extends State<DenunciaOuvidoriaScreen> {
+  final List<String> _crimesAmbientaisList = [
+    'Desmatamento',
+    'Poluição do Rio',
+    'Queimada',
+    'Poluição do Ar',
+    'Poluição Sonora',
+    'Assoreamento',
+    'Desmatamento e Aterramento das Nascentes',
+    'Poluição Hídrica',
+    'Extração Minerária Ilegal',
+    'Extração de Madeira Ilegal',
+    'Extração de Area Ilegal',
+    'Descarte Inadequado de Resíduos',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,16 +64,22 @@ class _DenunciaOuvidoriaScreenState extends State<DenunciaOuvidoriaScreen> {
                     icon: Icons.clean_hands,
                     color: Colors.green.shade700,
                     title: 'Crimes Ambientais',
+                    onTap: () => Navigator.pushNamed(
+                        context, '/denuncia_ouvidoria/select_denuncia'),
                   ),
                   _buildCard(
                     icon: Icons.factory,
                     color: Colors.yellow.shade800,
                     title: 'Irregularidade de Empreendimentos',
+                    onTap: () => Navigator.pushNamed(
+                        context, '/denuncia_ouvidoria/select_denuncia'),
                   ),
                   _buildCard(
                     icon: Icons.home_work,
                     color: Colors.blue.shade900,
                     title: 'Irregularidade no Serviço Público',
+                    onTap: () => Navigator.pushNamed(
+                        context, '/denuncia_ouvidoria/select_denuncia'),
                   ),
                 ],
               ),
@@ -73,6 +94,7 @@ class _DenunciaOuvidoriaScreenState extends State<DenunciaOuvidoriaScreen> {
     required Color color,
     required String title,
     required IconData icon,
+    required VoidCallback onTap,
   }) {
     return Card(
       elevation: 2,
@@ -80,37 +102,40 @@ class _DenunciaOuvidoriaScreenState extends State<DenunciaOuvidoriaScreen> {
         borderRadius: BorderRadius.circular(16.0),
       ),
       color: color,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Icon(
-                  icon,
-                  size: 56,
-                  color: Colors.white,
-                ),
-                const Icon(
-                  Icons.more_vert,
-                  size: 32,
-                  color: Colors.white,
-                ),
-              ],
-            ),
-            16.height,
-            Text(
-              title,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
-                color: Colors.white,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Icon(
+                    icon,
+                    size: 56,
+                    color: Colors.white,
+                  ),
+                  const Icon(
+                    Icons.more_vert,
+                    size: 32,
+                    color: Colors.white,
+                  ),
+                ],
               ),
-            ),
-          ],
+              16.height,
+              Text(
+                title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
