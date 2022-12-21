@@ -3,6 +3,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:semasma/screens/app_splash_screen.dart';
 import 'package:semasma/utils/app_theme.dart';
 
+import 'screens/denuncia_ouvidoria/denuncia_ouvidoria_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/links_uteis/links_uteis_screen.dart';
 import 'screens/portal_transparencia/portal_transparencia_screen.dart';
@@ -58,6 +59,10 @@ class MyApp extends StatelessWidget {
           case '/links_uteis':
             return MaterialPageRoute(
               builder: (context) => const LinksUteisScreen(),
+            );
+          case '/denuncia_ouvidoria':
+            return MaterialPageRoute(
+              builder: (context) => const DenunciaOuvidoriaScreen(),
             );
           default:
             return MaterialPageRoute(
