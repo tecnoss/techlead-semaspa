@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
     {
       "icon": "assets/icons/home/links_uteis.png",
       "title": "Acessar Links Úteis",
-      "route": "/acessar_links_uteis",
+      "route": "/links_uteis",
     },
     {
       "icon": "assets/icons/home/denuncia_ouvidoria.png",
