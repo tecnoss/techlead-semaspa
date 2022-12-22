@@ -21,9 +21,12 @@ class RadioModel {
 
 class _IdentificationScreenState extends State<IdentificationScreen> {
   List<RadioModel> sampleData = <RadioModel>[
-    RadioModel(true, 'Sim'),
+    RadioModel(false, 'Sim'),
     RadioModel(false, 'Não'),
   ];
+
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +60,7 @@ class _IdentificationScreenState extends State<IdentificationScreen> {
                           element.isSelected = false;
                         }
                         sampleData[0].isSelected = true;
+                        _nameController.text = '';
                       });
                     },
                     child: RadioItem(sampleData[0], appColorPrimary),
@@ -71,12 +75,79 @@ class _IdentificationScreenState extends State<IdentificationScreen> {
                           element.isSelected = false;
                         }
                         sampleData[1].isSelected = true;
+                        _nameController.text = 'Relator Anônimo';
+                        _emailController.text = '';
                       });
                     },
                     child: RadioItem(sampleData[1], Colors.red),
                   ),
                 ),
               ],
+            ),
+            16.height,
+            TextField(
+              controller: _nameController,
+              enabled: sampleData[0].isSelected,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 14,
+              ),
+              decoration: const InputDecoration(
+                labelText: 'Nome:',
+                hintText: 'Digite o seu nome completo',
+                hintStyle: TextStyle(
+                  color: Colors.black54,
+                  fontSize: 12,
+                ),
+                labelStyle: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+            16.height,
+            sampleData[0].isSelected
+                ? TextField(
+                    controller: _emailController,
+                    enabled: sampleData[0].isSelected,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                    ),
+                    decoration: const InputDecoration(
+                      labelText: 'E-mail:',
+                      hintText: 'Digite o seu e-mail',
+                      hintStyle: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 12,
+                      ),
+                      labelStyle: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                  )
+                : Container(),
+            56.height,
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+              child: const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Text(
+                  'Prosseguir',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -93,7 +164,7 @@ class RadioItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(14.0),
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(
