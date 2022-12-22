@@ -5,18 +5,13 @@ import 'package:semasma/widgets/leading.dart';
 import 'package:semasma/widgets/screen_title.dart';
 import 'package:semasma/widgets/title_app_bar.dart';
 
+import 'widgets/radio_item.dart';
+
 class IdentificationScreen extends StatefulWidget {
   const IdentificationScreen({super.key});
 
   @override
   State<IdentificationScreen> createState() => _IdentificationScreenState();
-}
-
-class RadioModel {
-  bool isSelected;
-  final String buttonText;
-
-  RadioModel(this.isSelected, this.buttonText);
 }
 
 class _IdentificationScreenState extends State<IdentificationScreen> {
@@ -132,7 +127,9 @@ class _IdentificationScreenState extends State<IdentificationScreen> {
                 : Container(),
             56.height,
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/denuncia_ouvidoria/location');
+              },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
@@ -151,61 +148,6 @@ class _IdentificationScreenState extends State<IdentificationScreen> {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class RadioItem extends StatelessWidget {
-  const RadioItem(this._item, this.color, {super.key});
-  final RadioModel _item;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(14.0),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(
-          Radius.circular(8.0),
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Container(
-            height: 24.0,
-            width: 24.0,
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(4.0),
-              ),
-            ),
-            child: Center(
-              child: _item.isSelected
-                  ? const Icon(
-                      Icons.check,
-                      size: 24.0,
-                      color: Colors.white,
-                    )
-                  : Container(),
-            ),
-          ),
-          8.width,
-          Center(
-            child: Text(
-              _item.buttonText,
-              style: TextStyle(
-                fontWeight:
-                    _item.isSelected ? FontWeight.bold : FontWeight.normal,
-                color: !_item.isSelected ? Colors.black54 : Colors.black,
-                fontSize: 12.0,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

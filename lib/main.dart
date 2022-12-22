@@ -5,6 +5,7 @@ import 'package:semasma/utils/app_theme.dart';
 
 import 'screens/denuncia_ouvidoria/denuncia_ouvidoria_screen.dart';
 import 'screens/denuncia_ouvidoria/identification_screen.dart';
+import 'screens/denuncia_ouvidoria/location_denuncia.dart';
 import 'screens/denuncia_ouvidoria/select_denuncia_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/links_uteis/links_uteis_screen.dart';
@@ -77,6 +78,10 @@ class MyApp extends StatelessWidget {
           case '/denuncia_ouvidoria/identification':
             return MaterialPageRoute(
               builder: (context) => const IdentificationScreen(),
+            );
+          case '/denuncia_ouvidoria/location':
+            return MaterialPageRoute(
+              builder: (context) => const LocationDenunciaScreen(),
             );
           default:
             return MaterialPageRoute(
