@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
     {
       "icon": "assets/icons/home/catis.png",
       "title": "Solicitar Chamados no CATIS",
-      "route": "/solicitar_chamados_catis",
+      "route": "/chamado_catis",
     },
     {
       "icon": "assets/icons/home/faqs.png",
