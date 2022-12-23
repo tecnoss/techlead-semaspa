@@ -90,8 +90,7 @@ class _ChamadoCatisSCreenState extends State<ChamadoCatisSCreen> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(
-                      context, '/denuncia_ouvidoria/data_location');
+                  Navigator.pushNamed(context, '/chamado_catis/form');
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(

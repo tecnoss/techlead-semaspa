@@ -3,6 +3,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:semasma/screens/app_splash_screen.dart';
 import 'package:semasma/utils/app_theme.dart';
 
+import 'screens/chamado_catis/catis_form.dart';
 import 'screens/chamado_catis/chamado_catis_screen.dart';
 import 'screens/denuncia_ouvidoria/data_location_screen.dart';
 import 'screens/denuncia_ouvidoria/denuncia_ouvidoria_screen.dart';
@@ -92,6 +93,10 @@ class MyApp extends StatelessWidget {
           case '/chamado_catis':
             return MaterialPageRoute(
               builder: (context) => const ChamadoCatisSCreen(),
+            );
+          case '/chamado_catis/form':
+            return MaterialPageRoute(
+              builder: (context) => const CatisFormScreen(),
             );
           default:
             return MaterialPageRoute(
