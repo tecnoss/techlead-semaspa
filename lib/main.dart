@@ -3,6 +3,11 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:semasma/screens/app_splash_screen.dart';
 import 'package:semasma/utils/app_theme.dart';
 
+import 'screens/denuncia_ouvidoria/data_location_screen.dart';
+import 'screens/denuncia_ouvidoria/denuncia_ouvidoria_screen.dart';
+import 'screens/denuncia_ouvidoria/identification_screen.dart';
+import 'screens/denuncia_ouvidoria/location_denuncia.dart';
+import 'screens/denuncia_ouvidoria/select_denuncia_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/links_uteis/links_uteis_screen.dart';
 import 'screens/portal_transparencia/portal_transparencia_screen.dart';
@@ -58,6 +63,30 @@ class MyApp extends StatelessWidget {
           case '/links_uteis':
             return MaterialPageRoute(
               builder: (context) => const LinksUteisScreen(),
+            );
+          case '/denuncia_ouvidoria':
+            return MaterialPageRoute(
+              builder: (context) => const DenunciaOuvidoriaScreen(),
+            );
+          case '/denuncia_ouvidoria/select_denuncia':
+            var args = settings.arguments as SelectDenunciaScreenArguments;
+            return MaterialPageRoute(
+              builder: (context) => SelectDenunciaScreen(
+                titleScreen: args.titleScreen,
+                listOptions: args.listOptions,
+              ),
+            );
+          case '/denuncia_ouvidoria/identification':
+            return MaterialPageRoute(
+              builder: (context) => const IdentificationScreen(),
+            );
+          case '/denuncia_ouvidoria/location':
+            return MaterialPageRoute(
+              builder: (context) => const LocationDenunciaScreen(),
+            );
+          case '/denuncia_ouvidoria/data_location':
+            return MaterialPageRoute(
+              builder: (context) => const DataLocationScreen(),
             );
           default:
             return MaterialPageRoute(
