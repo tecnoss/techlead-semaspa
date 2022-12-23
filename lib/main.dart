@@ -11,6 +11,7 @@ import 'screens/denuncia_ouvidoria/denuncia_ouvidoria_screen.dart';
 import 'screens/denuncia_ouvidoria/identification_screen.dart';
 import 'screens/denuncia_ouvidoria/location_denuncia.dart';
 import 'screens/denuncia_ouvidoria/select_denuncia_screen.dart';
+import 'screens/faqs/faqs_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/links_uteis/links_uteis_screen.dart';
 import 'screens/portal_transparencia/portal_transparencia_screen.dart';
@@ -102,6 +103,10 @@ class MyApp extends StatelessWidget {
           case '/chamado_catis/details':
             return MaterialPageRoute(
               builder: (context) => const DetailCatisForm(),
+            );
+          case '/faqs':
+            return MaterialPageRoute(
+              builder: (context) => const FaqsScreen(),
             );
           default:
             return MaterialPageRoute(

@@ -25,8 +25,7 @@ class AppThemeData {
     ),
     textSelectionTheme: const TextSelectionThemeData(cursorColor: Colors.black),
     colorScheme: const ColorScheme.light(primary: appColorPrimary),
-    cardTheme: const CardTheme(color: Colors.white),
-    cardColor: cardLightColor,
+    cardTheme: const CardTheme(color: Colors.red),
     iconTheme: const IconThemeData(color: textPrimaryColor),
     bottomSheetTheme: const BottomSheetThemeData(backgroundColor: whiteColor),
     textTheme: const TextTheme(
