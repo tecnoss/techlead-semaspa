@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:semasma/widgets/bottom_bar.dart';
 import 'package:semasma/widgets/leading.dart';
 import 'package:semasma/widgets/screen_title.dart';
 import 'package:semasma/widgets/title_app_bar.dart';
@@ -21,11 +22,15 @@ class CustomScaffold extends StatelessWidget {
         title: TitleAppBar(title: appBarTitle),
         leading: const Leading(),
       ),
+      bottomNavigationBar: const BottomBar(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [ScreenTitle(title: screenTitle)],
+          children: [
+            ScreenTitle(title: screenTitle),
+            ...child,
+          ],
         ),
       ),
     );
