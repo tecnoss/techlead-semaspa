@@ -18,6 +18,7 @@ dependencies:
   flutter_svg: ^1.1.6
   horizontal_data_table: ^4.1.4
   webview_flutter: ^4.0.0
+  location: ^4.4.0
 
 dev_dependencies:
   flutter_test:
@@ -35,6 +36,7 @@ flutter:
     - assets/icons/previsao_tempo/
     - assets/icons/redes_sociais/
     - assets/icons/links_uteis/
+    - assets/icons/ouvidoria/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
