@@ -3,6 +3,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:semasma/screens/app_splash_screen.dart';
 import 'package:semasma/utils/app_theme.dart';
 
+import 'screens/chamado_catis/chamado_catis_screen.dart';
 import 'screens/denuncia_ouvidoria/data_location_screen.dart';
 import 'screens/denuncia_ouvidoria/denuncia_ouvidoria_screen.dart';
 import 'screens/denuncia_ouvidoria/identification_screen.dart';
@@ -87,6 +88,10 @@ class MyApp extends StatelessWidget {
           case '/denuncia_ouvidoria/data_location':
             return MaterialPageRoute(
               builder: (context) => const DataLocationScreen(),
+            );
+          case '/chamado_catis':
+            return MaterialPageRoute(
+              builder: (context) => const ChamadoCatisSCreen(),
             );
           default:
             return MaterialPageRoute(
