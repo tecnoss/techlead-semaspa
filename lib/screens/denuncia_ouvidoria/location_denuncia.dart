@@ -332,7 +332,8 @@ class _LocationDenunciaScreenState extends State<LocationDenunciaScreen> {
               16.height,
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/denuncia_ouvidoria/location');
+                  Navigator.pushNamed(
+                      context, '/denuncia_ouvidoria/data_location');
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
