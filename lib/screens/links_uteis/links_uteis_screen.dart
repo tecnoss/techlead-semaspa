@@ -82,7 +82,7 @@ class _LinksUteisScreenState extends State<LinksUteisScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Image.asset(
-                          'assets/icons/links_uteis/sislam.png',
+                          'assets/icons/links_uteis/simlam.png',
                           width: 100.0,
                         ),
                       ),
