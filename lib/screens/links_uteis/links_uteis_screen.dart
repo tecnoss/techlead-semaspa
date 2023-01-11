@@ -4,6 +4,7 @@ import 'package:semasma/widgets/bottom_bar.dart';
 import 'package:semasma/widgets/leading.dart';
 import 'package:semasma/widgets/screen_title.dart';
 import 'package:semasma/widgets/title_app_bar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LinksUteisScreen extends StatefulWidget {
   const LinksUteisScreen({super.key});
@@ -13,6 +14,13 @@ class LinksUteisScreen extends StatefulWidget {
 }
 
 class _LinksUteisScreenState extends State<LinksUteisScreen> {
+  Future<void> _launchURL(String target) async {
+    final Uri url = Uri.parse(target);
+    if (!await launchUrl(url)) {
+      print('Could not launch $url');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +56,9 @@ class _LinksUteisScreenState extends State<LinksUteisScreen> {
                       borderRadius: BorderRadius.circular(14.0),
                     ),
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () => _launchURL(
+                        'https://www.semas.pa.gov.br/',
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Image.asset(
@@ -63,7 +73,9 @@ class _LinksUteisScreenState extends State<LinksUteisScreen> {
                       borderRadius: BorderRadius.circular(14.0),
                     ),
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () => _launchURL(
+                        'https://www.semas.pa.gov.br/seloverde/',
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Image.asset(
@@ -78,7 +90,9 @@ class _LinksUteisScreenState extends State<LinksUteisScreen> {
                       borderRadius: BorderRadius.circular(14.0),
                     ),
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () => _launchURL(
+                        'https://sislam.pa.gov.br/',
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Image.asset(
@@ -93,7 +107,9 @@ class _LinksUteisScreenState extends State<LinksUteisScreen> {
                       borderRadius: BorderRadius.circular(14.0),
                     ),
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () => _launchURL(
+                        'http://car.semas.pa.gov.br/#/',
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Image.asset(
