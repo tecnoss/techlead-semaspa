@@ -6,9 +6,17 @@ import 'package:semasma/widgets/bottom_bar.dart';
 import 'package:semasma/widgets/leading.dart';
 import 'package:semasma/widgets/screen_title.dart';
 import 'package:semasma/widgets/title_app_bar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RedesSociaisScreen extends StatelessWidget {
   const RedesSociaisScreen({super.key});
+
+  Future<void> _launchURL(String target) async {
+    final Uri url = Uri.parse(target);
+    if (!await launchUrl(url)) {
+      print('Could not launch $url');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +51,9 @@ class RedesSociaisScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () => _launchURL(
+                    'https://www.facebook.com/se-maspara/',
+                  ),
                   icon: SvgPicture.asset(
                     'assets/icons/redes_sociais/facebook.svg',
                   ),
@@ -51,7 +61,9 @@ class RedesSociaisScreen extends StatelessWidget {
                   color: appColorPrimary,
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () => _launchURL(
+                    'https://twitter.com/semaspara',
+                  ),
                   icon: SvgPicture.asset(
                     'assets/icons/redes_sociais/twitter.svg',
                   ),
@@ -59,7 +71,9 @@ class RedesSociaisScreen extends StatelessWidget {
                   color: appColorPrimary,
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () => _launchURL(
+                    'https://www.instagram.com/semaspara/',
+                  ),
                   icon: SvgPicture.asset(
                     'assets/icons/redes_sociais/instagram.svg',
                   ),
@@ -67,7 +81,9 @@ class RedesSociaisScreen extends StatelessWidget {
                   color: appColorPrimary,
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () => _launchURL(
+                    'https://www.youtube.com/channel/UCR8bxUop5m4JbRO52H8C5Aw',
+                  ),
                   icon: SvgPicture.asset(
                     'assets/icons/redes_sociais/youtube.svg',
                   ),
