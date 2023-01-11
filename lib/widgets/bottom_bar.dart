@@ -19,11 +19,11 @@ class BottomBar extends StatelessWidget {
           const SizedBox(
             width: 100,
             child: Text(
-              "SECRETARIA DE ESTADO DE DESENVOLVIMENTO ECONÔMICO E SOCIAL - SEDESE",
+              "SECRETARIA DE MEIO AMBIENTE E SUSTENTABILIDADE",
               textAlign: TextAlign.end,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 4,
+                fontSize: 6,
                 fontWeight: FontWeight.bold,
               ),
             ),
