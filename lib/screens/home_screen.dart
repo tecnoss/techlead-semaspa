@@ -102,6 +102,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     if (index == 0) {
                       _launchURL(
                           "https://www.semas.pa.gov.br/institucional/o-que-e-a-sema/");
+                    } else if (index == 4) {
+                      _launchURL(
+                          "https://monitoramento.semas.pa.gov.br/simlam/index.htm");
                     } else if (index == 8) {
                       _launchURL(
                           "https://www.semas.pa.gov.br/transparencia-publica/perguntas-frequentes/");
