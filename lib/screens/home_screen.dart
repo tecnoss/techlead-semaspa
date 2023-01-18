@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:semasma/widgets/bottom_bar.dart';
 import 'package:semasma/widgets/screen_title.dart';
 import 'package:semasma/widgets/title_app_bar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -58,6 +59,12 @@ class _HomeScreenState extends State<HomeScreen> {
       "route": "/faqs",
     },
   ];
+  Future<void> _launchURL(String target) async {
+    final Uri url = Uri.parse(target);
+    if (!await launchUrl(url)) {
+      print('Could not launch $url');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +99,15 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, _itens[index]["route"]);
+                    if (index == 0) {
+                      _launchURL(
+                          "https://www.semas.pa.gov.br/institucional/o-que-e-a-sema/");
+                    } else if (index == 8) {
+                      _launchURL(
+                          "https://www.semas.pa.gov.br/transparencia-publica/perguntas-frequentes/");
+                    } else {
+                      Navigator.pushNamed(context, _itens[index]["route"]);
+                    }
                   },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
