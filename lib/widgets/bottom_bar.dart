@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:semasma/utils/app_colors.dart';
 
 class BottomBar extends StatelessWidget {
   const BottomBar({super.key});
@@ -10,7 +11,7 @@ class BottomBar extends StatelessWidget {
       margin: const EdgeInsets.only(top: 2),
       width: double.maxFinite,
       decoration: const BoxDecoration(
-        color: Color(0xff0056a3),
+        color: appColorPrimary,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
