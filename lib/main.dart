@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
             );
           case '/redes_sociais':
             return MaterialPageRoute(
-              builder: (context) => const RedesSociaisScreen(),
+              builder: (context) => RedesSociaisScreen(),
             );
           case '/processo_simlam':
             return MaterialPageRoute(
