@@ -91,7 +91,7 @@ class _DenunciaOuvidoriaScreenState extends State<DenunciaOuvidoriaScreen> {
                   ),
                   _buildCard(
                     icon: Icons.factory,
-                    color: Colors.yellow.shade800,
+                    color: const Color(0xffA81010),
                     title: 'Irregularidade de Empreendimentos',
                     onTap: () => Navigator.pushNamed(
                       context,

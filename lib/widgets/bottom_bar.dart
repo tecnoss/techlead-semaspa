@@ -17,56 +17,10 @@ class BottomBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const SizedBox(
-            width: 100,
-            child: Text(
-              "SECRETARIA DE MEIO AMBIENTE E SUSTENTABILIDADE",
-              textAlign: TextAlign.end,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 6,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
           Image.asset(
-            'assets/images/logo-pa.png',
-            height: 80,
-            width: 80,
+            'assets/images/new-logo.png',
+            width: 250,
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text(
-                "GOVERNO",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 8,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                "DO ESTADO",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 8,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                "DO PARÁ",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 8,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-                width: 100,
-              )
-            ],
-          )
         ],
       ),
     );
