@@ -51,6 +51,7 @@ class _DenunciaOuvidoriaScreenState extends State<DenunciaOuvidoriaScreen> {
       appBar: AppBar(
         title: const TitleAppBar(),
         leading: const Leading(),
+        centerTitle: true,
       ),
       bottomNavigationBar: const BottomBar(),
       body: SingleChildScrollView(
