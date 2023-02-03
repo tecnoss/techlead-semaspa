@@ -18,11 +18,11 @@ class _HomeScreenState extends State<HomeScreen> {
       "title": "Conheça a SEMAS",
       "route": "/conheca_semas",
     },
-    {
-      "icon": "assets/icons/home/previsao_tempo.png",
-      "title": "Previsão do Tempo",
-      "route": "/previsao_tempo",
-    },
+    // {
+    //   "icon": "assets/icons/home/previsao_tempo.png",
+    //   "title": "Previsão do Tempo",
+    //   "route": "/previsao_tempo",
+    // },
     {
       "icon": "assets/icons/home/redes_sociais.png",
       "title": "Redes Sociais",
@@ -48,11 +48,11 @@ class _HomeScreenState extends State<HomeScreen> {
       "title": "Realizar Denúncias na Ouvidoria",
       "route": "/denuncia_ouvidoria",
     },
-    {
-      "icon": "assets/icons/home/catis.png",
-      "title": "Solicitar Chamados no CATIS",
-      "route": "/chamado_catis",
-    },
+    // {
+    //   "icon": "assets/icons/home/catis.png",
+    //   "title": "Solicitar Chamados no CATIS",
+    //   "route": "/chamado_catis",
+    // },
     {
       "icon": "assets/icons/home/faqs.png",
       "title": "FAQs",
