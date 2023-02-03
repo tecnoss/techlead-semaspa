@@ -9,12 +9,35 @@ import 'package:semasma/widgets/title_app_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class RedesSociaisScreen extends StatelessWidget {
-  const RedesSociaisScreen({super.key});
+  RedesSociaisScreen({super.key});
+
+  final List _buttons = [
+    {
+      'text': 'semaspara',
+      'icon': 'assets/icons/redes_sociais/facebook.svg',
+      'url': 'https://www.facebook.com/se-maspara/',
+    },
+    {
+      'text': '@semaspara',
+      'icon': 'assets/icons/redes_sociais/twitter.svg',
+      'url': 'https://twitter.com/semaspara',
+    },
+    {
+      'text': '@semaspara',
+      'icon': 'assets/icons/redes_sociais/instagram.svg',
+      'url': 'https://www.instagram.com/semaspara/',
+    },
+    {
+      'text': 'semaspara',
+      'icon': 'assets/icons/redes_sociais/youtube.svg',
+      'url': 'https://www.youtube.com/channel/UCR8bxUop5m4JbRO52H8C5Aw',
+    },
+  ];
 
   Future<void> _launchURL(String target) async {
     final Uri url = Uri.parse(target);
     if (!await launchUrl(url)) {
-      print('Could not launch $url');
+      debugPrint('Could not launch $url');
     }
   }
 
@@ -24,6 +47,7 @@ class RedesSociaisScreen extends StatelessWidget {
       appBar: AppBar(
         title: const TitleAppBar(),
         leading: const Leading(),
+        centerTitle: true,
       ),
       bottomNavigationBar: const BottomBar(),
       body: Padding(
@@ -49,52 +73,46 @@ class RedesSociaisScreen extends StatelessWidget {
             16.height,
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                IconButton(
-                  onPressed: () => _launchURL(
-                    'https://www.facebook.com/se-maspara/',
-                  ),
-                  icon: SvgPicture.asset(
-                    'assets/icons/redes_sociais/facebook.svg',
-                  ),
-                  iconSize: 48,
-                  color: appColorPrimary,
-                ),
-                IconButton(
-                  onPressed: () => _launchURL(
-                    'https://twitter.com/semaspara',
-                  ),
-                  icon: SvgPicture.asset(
-                    'assets/icons/redes_sociais/twitter.svg',
-                  ),
-                  iconSize: 48,
-                  color: appColorPrimary,
-                ),
-                IconButton(
-                  onPressed: () => _launchURL(
-                    'https://www.instagram.com/semaspara/',
-                  ),
-                  icon: SvgPicture.asset(
-                    'assets/icons/redes_sociais/instagram.svg',
-                  ),
-                  iconSize: 48,
-                  color: appColorPrimary,
-                ),
-                IconButton(
-                  onPressed: () => _launchURL(
-                    'https://www.youtube.com/channel/UCR8bxUop5m4JbRO52H8C5Aw',
-                  ),
-                  icon: SvgPicture.asset(
-                    'assets/icons/redes_sociais/youtube.svg',
-                  ),
-                  iconSize: 48,
-                  color: appColorPrimary,
-                ),
-              ],
+              children: _buttons
+                  .map(
+                    (button) => _buildButton(
+                      text: button['text'],
+                      icon: button['icon'],
+                      url: button['url'],
+                    ),
+                  )
+                  .toList(),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildButton({
+    required String text,
+    required String icon,
+    required String url,
+  }) {
+    return Column(
+      children: [
+        IconButton(
+          onPressed: () => _launchURL(url),
+          icon: SvgPicture.asset(
+            icon,
+          ),
+          iconSize: 48,
+          color: appColorPrimary,
+        ),
+        Text(
+          text,
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            color: Colors.black54,
+          ),
+        ),
+      ],
     );
   }
 }

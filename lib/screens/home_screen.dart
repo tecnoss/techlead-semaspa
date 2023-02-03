@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:semasma/widgets/bottom_bar.dart';
 import 'package:semasma/widgets/screen_title.dart';
 import 'package:semasma/widgets/title_app_bar.dart';
@@ -18,11 +19,11 @@ class _HomeScreenState extends State<HomeScreen> {
       "title": "Conheça a SEMAS",
       "route": "/conheca_semas",
     },
-    {
-      "icon": "assets/icons/home/previsao_tempo.png",
-      "title": "Previsão do Tempo",
-      "route": "/previsao_tempo",
-    },
+    // {
+    //   "icon": "assets/icons/home/previsao_tempo.png",
+    //   "title": "Previsão do Tempo",
+    //   "route": "/previsao_tempo",
+    // },
     {
       "icon": "assets/icons/home/redes_sociais.png",
       "title": "Redes Sociais",
@@ -48,11 +49,11 @@ class _HomeScreenState extends State<HomeScreen> {
       "title": "Realizar Denúncias na Ouvidoria",
       "route": "/denuncia_ouvidoria",
     },
-    {
-      "icon": "assets/icons/home/catis.png",
-      "title": "Solicitar Chamados no CATIS",
-      "route": "/chamado_catis",
-    },
+    // {
+    //   "icon": "assets/icons/home/catis.png",
+    //   "title": "Solicitar Chamados no CATIS",
+    //   "route": "/chamado_catis",
+    // },
     {
       "icon": "assets/icons/home/faqs.png",
       "title": "FAQs",
@@ -62,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _launchURL(String target) async {
     final Uri url = Uri.parse(target);
     if (!await launchUrl(url)) {
-      print('Could not launch $url');
+      debugPrint('Could not launch $url');
     }
   }
 
@@ -89,6 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
+          24.height,
           Expanded(
             child: GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -102,10 +104,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     if (index == 0) {
                       _launchURL(
                           "https://www.semas.pa.gov.br/institucional/o-que-e-a-sema/");
-                    } else if (index == 4) {
+                    } else if (index == 2) {
                       _launchURL(
                           "https://monitoramento.semas.pa.gov.br/simlam/index.htm");
-                    } else if (index == 8) {
+                    } else if (index == 6) {
                       _launchURL(
                           "https://www.semas.pa.gov.br/transparencia-publica/perguntas-frequentes/");
                     } else {
@@ -113,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     }
                   },
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
                         height: 60,

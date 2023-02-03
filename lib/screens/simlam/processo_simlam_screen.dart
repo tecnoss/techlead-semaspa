@@ -31,6 +31,7 @@ class _ProcessoSimlamScreenState extends State<ProcessoSimlamScreen> {
       appBar: AppBar(
         title: const TitleAppBar(),
         leading: const Leading(),
+        centerTitle: true,
       ),
       bottomNavigationBar: const BottomBar(),
       body: Padding(

@@ -34,13 +34,13 @@ class _AppSplashScreenState extends State<AppSplashScreen>
   void init() async {
     Timer(const Duration(milliseconds: 600), () {
       setState(() {
-        boxColor = const Color(0xff0056a3);
+        boxColor = const Color(0xff0871B9);
         _a = true;
       });
     });
     Timer(const Duration(milliseconds: 1500), () {
       setState(() {
-        boxColor = const Color(0xff0056a3);
+        boxColor = const Color(0xff0871B9);
         _c = true;
       });
     });
@@ -137,7 +137,7 @@ class _AppSplashScreenState extends State<AppSplashScreen>
                             child: Container(
                               decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Color(0xff0056a3),
+                                color: Color(0xff0871B9),
                               ),
                             ),
                           ),

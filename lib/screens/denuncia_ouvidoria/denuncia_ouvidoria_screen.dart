@@ -51,6 +51,7 @@ class _DenunciaOuvidoriaScreenState extends State<DenunciaOuvidoriaScreen> {
       appBar: AppBar(
         title: const TitleAppBar(),
         leading: const Leading(),
+        centerTitle: true,
       ),
       bottomNavigationBar: const BottomBar(),
       body: SingleChildScrollView(
@@ -91,7 +92,7 @@ class _DenunciaOuvidoriaScreenState extends State<DenunciaOuvidoriaScreen> {
                   ),
                   _buildCard(
                     icon: Icons.factory,
-                    color: Colors.yellow.shade800,
+                    color: const Color(0xffA81010),
                     title: 'Irregularidade de Empreendimentos',
                     onTap: () => Navigator.pushNamed(
                       context,
