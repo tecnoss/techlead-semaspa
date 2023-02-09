@@ -21,6 +21,7 @@ dependencies:
   location: ^4.4.0
   expandable: ^5.0.1
   url_launcher: ^6.1.7
+  csv: ^5.0.1
 
 dev_dependencies:
   flutter_test:
@@ -32,6 +33,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/dm.csv
     - assets/images/
     - assets/icons/
     - assets/icons/home/
