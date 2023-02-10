@@ -142,8 +142,14 @@ class _SelectDenunciaScreenState extends State<SelectDenunciaScreen> {
                               context
                                   .read<SubjectRepository>()
                                   .selectedSubject = option;
-                              Navigator.pushNamed(
-                                  context, '/denuncia_ouvidoria/city');
+
+                              if (option.competencia == 'Município') {
+                                Navigator.pushNamed(
+                                    context, '/denuncia_ouvidoria/city');
+                              } else {
+                                Navigator.pushNamed(context,
+                                    '/denuncia_ouvidoria/identification');
+                              }
                             },
                             child: ListTile(
                               title: Text(

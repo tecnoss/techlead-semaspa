@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:semasma/screens/denuncia_ouvidoria/models/municipio_model.dart';
 import 'package:semasma/screens/denuncia_ouvidoria/repository/municipio_provider.dart';
 import 'package:semasma/screens/denuncia_ouvidoria/repository/subject_provider.dart';
+import 'package:semasma/widgets/custom_button.dart';
 import 'package:semasma/widgets/custom_scaffold.dart';
 
 import '../models/subject_model.dart';
@@ -105,7 +106,7 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
 
   Widget _buildData() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const Text(
           'Dados do município:',
@@ -167,6 +168,16 @@ class _SelectCityScreenState extends State<SelectCityScreen> {
           4.height,
           selectableText('${_selectedCity!.site}'),
         ],
+        24.height,
+        CustomButton(
+          onPressed: () {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              '/home',
+              (route) => false,
+            );
+          },
+          text: "Voltar ao Menu",
+        ),
       ],
     );
   }
