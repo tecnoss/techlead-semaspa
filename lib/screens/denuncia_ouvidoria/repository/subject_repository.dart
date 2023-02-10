@@ -1,6 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:semasma/screens/denuncia_ouvidoria/models/subject_model.dart';
 
-class SubjectRepository {
+class SubjectRepository extends ChangeNotifier {
   final List<String> _crimesAmbientaisList = [
     'Assoreamento',
     'Descarte Irregular de Resíduos',
