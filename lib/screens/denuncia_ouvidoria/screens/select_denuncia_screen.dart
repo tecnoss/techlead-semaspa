@@ -147,8 +147,8 @@ class _SelectDenunciaScreenState extends State<SelectDenunciaScreen> {
                                 Navigator.pushNamed(
                                     context, '/denuncia_ouvidoria/city');
                               } else {
-                                Navigator.pushNamed(context,
-                                    '/denuncia_ouvidoria/identification');
+                                Navigator.pushNamed(
+                                    context, '/denuncia_ouvidoria/info');
                               }
                             },
                             child: ListTile(
