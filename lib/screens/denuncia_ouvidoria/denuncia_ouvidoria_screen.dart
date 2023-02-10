@@ -86,7 +86,6 @@ class _DenunciaOuvidoriaScreenState extends State<DenunciaOuvidoriaScreen> {
                       '/denuncia_ouvidoria/select_denuncia',
                       arguments: SelectDenunciaScreenArguments(
                         titleScreen: 'Crimes Ambientais',
-                        listOptions: _crimesAmbientaisList,
                       ),
                     ),
                   ),
@@ -99,7 +98,6 @@ class _DenunciaOuvidoriaScreenState extends State<DenunciaOuvidoriaScreen> {
                       '/denuncia_ouvidoria/select_denuncia',
                       arguments: SelectDenunciaScreenArguments(
                         titleScreen: 'Irregularidade de Empreendimentos',
-                        listOptions: _irregularidadesEmpreendimentos,
                       ),
                     ),
                   ),
@@ -112,7 +110,6 @@ class _DenunciaOuvidoriaScreenState extends State<DenunciaOuvidoriaScreen> {
                       '/denuncia_ouvidoria/select_denuncia',
                       arguments: SelectDenunciaScreenArguments(
                         titleScreen: 'Irregularidade no Serviço Público',
-                        listOptions: _crimesAmbientaisList,
                       ),
                     ),
                   ),

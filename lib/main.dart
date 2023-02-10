@@ -86,7 +86,6 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(
                 builder: (context) => SelectDenunciaScreen(
                   titleScreen: args.titleScreen,
-                  listOptions: args.listOptions,
                 ),
               );
             case '/denuncia_ouvidoria/identification':

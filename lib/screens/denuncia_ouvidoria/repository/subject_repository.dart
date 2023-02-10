@@ -56,7 +56,7 @@ class SubjectRepository extends ChangeNotifier {
 
     for (var element in _irregularidadesEmpreendimentos) {
       subjects.add(Subject(
-        escopo: 'Irregularidades em Empreendimentos',
+        escopo: 'Irregularidade de Empreendimentos',
         name: element,
         competencia: getCompetencia(element),
       ));
@@ -64,10 +64,22 @@ class SubjectRepository extends ChangeNotifier {
 
     for (var element in _irregularidadeServicoPublico) {
       subjects.add(Subject(
-        escopo: 'Irregularidades no Serviço Público',
+        escopo: 'Irregularidade no Serviço Público',
         name: element,
         competencia: getCompetencia(element),
       ));
+    }
+
+    subjects.sort(customCompare);
+  }
+
+  int customCompare(Subject a, Subject b) {
+    if (a.name == "Outros") {
+      return 1;
+    } else if (b.name == "Outros") {
+      return -1;
+    } else {
+      return a.name.compareTo(b.name);
     }
   }
 
