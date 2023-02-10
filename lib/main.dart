@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:semasma/screens/app_splash_screen.dart';
-import 'package:semasma/screens/denuncia_ouvidoria/repository/subject_repository.dart';
+import 'package:semasma/screens/denuncia_ouvidoria/repository/municipio_provider.dart';
+import 'package:semasma/screens/denuncia_ouvidoria/repository/subject_provider.dart';
 import 'package:semasma/utils/app_theme.dart';
 
 import 'screens/chamado_catis/catis_form.dart';
 import 'screens/chamado_catis/chamado_catis_screen.dart';
 import 'screens/chamado_catis/details_catis_form.dart';
-import 'screens/denuncia_ouvidoria/data_location_screen.dart';
+import 'screens/denuncia_ouvidoria/screens/data_location_screen.dart';
 import 'screens/denuncia_ouvidoria/denuncia_ouvidoria_screen.dart';
-import 'screens/denuncia_ouvidoria/identification_screen.dart';
-import 'screens/denuncia_ouvidoria/location_denuncia.dart';
-import 'screens/denuncia_ouvidoria/select_denuncia_screen.dart';
+import 'screens/denuncia_ouvidoria/screens/identification_screen.dart';
+import 'screens/denuncia_ouvidoria/screens/location_denuncia.dart';
+import 'screens/denuncia_ouvidoria/screens/select_city_screen.dart';
+import 'screens/denuncia_ouvidoria/screens/select_denuncia_screen.dart';
 import 'screens/faqs/faqs_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/links_uteis/links_uteis_screen.dart';
@@ -39,6 +41,10 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<SubjectRepository>(
           create: (_) => SubjectRepository(),
+          lazy: true,
+        ),
+        ChangeNotifierProvider<MunicipioProvider>(
+          create: (_) => MunicipioProvider(),
           lazy: true,
         ),
       ],
@@ -87,6 +93,10 @@ class MyApp extends StatelessWidget {
                 builder: (context) => SelectDenunciaScreen(
                   titleScreen: args.titleScreen,
                 ),
+              );
+            case '/denuncia_ouvidoria/city':
+              return MaterialPageRoute(
+                builder: (context) => const SelectCityScreen(),
               );
             case '/denuncia_ouvidoria/identification':
               return MaterialPageRoute(

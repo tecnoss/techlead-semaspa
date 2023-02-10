@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
-import 'package:semasma/screens/denuncia_ouvidoria/repository/subject_repository.dart';
+import 'package:semasma/screens/denuncia_ouvidoria/repository/subject_provider.dart';
 import 'package:semasma/utils/app_colors.dart';
 import 'package:semasma/widgets/bottom_bar.dart';
 import 'package:semasma/widgets/leading.dart';
 import 'package:semasma/widgets/screen_title.dart';
 import 'package:semasma/widgets/title_app_bar.dart';
 
-import 'models/subject_model.dart';
+import '../models/subject_model.dart';
 
 class SelectDenunciaScreenArguments {
   final String titleScreen;
@@ -139,8 +139,11 @@ class _SelectDenunciaScreenState extends State<SelectDenunciaScreen> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              Navigator.pushNamed(context,
-                                  '/denuncia_ouvidoria/identification');
+                              context
+                                  .read<SubjectRepository>()
+                                  .selectedSubject = option;
+                              Navigator.pushNamed(
+                                  context, '/denuncia_ouvidoria/city');
                             },
                             child: ListTile(
                               title: Text(

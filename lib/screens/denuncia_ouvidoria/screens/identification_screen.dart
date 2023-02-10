@@ -5,7 +5,7 @@ import 'package:semasma/widgets/leading.dart';
 import 'package:semasma/widgets/screen_title.dart';
 import 'package:semasma/widgets/title_app_bar.dart';
 
-import 'widgets/radio_item.dart';
+import '../widgets/radio_item.dart';
 
 class IdentificationScreen extends StatefulWidget {
   const IdentificationScreen({super.key});

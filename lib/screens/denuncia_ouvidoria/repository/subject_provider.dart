@@ -45,6 +45,20 @@ class SubjectRepository extends ChangeNotifier {
 
   List<Subject> subjects = [];
 
+  final Subject _selectedSubject = Subject(
+    escopo: '',
+    name: '',
+    competencia: '',
+  );
+
+  Subject get selectedSubject => _selectedSubject;
+  set selectedSubject(Subject value) {
+    _selectedSubject.escopo = value.escopo;
+    _selectedSubject.name = value.name;
+    _selectedSubject.competencia = value.competencia;
+    notifyListeners();
+  }
+
   SubjectRepository() {
     for (var element in _crimesAmbientaisList) {
       subjects.add(Subject(

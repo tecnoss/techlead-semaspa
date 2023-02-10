@@ -5,14 +5,13 @@ import 'package:semasma/screens/denuncia_ouvidoria/models/municipio_model.dart';
 void getCSVData() async {
   // Lê o arquivo CSV como uma lista de linhas
   List<List<dynamic>> data = await readCsv('assets/dm.csv');
-
   List<Municipio> municipios = [];
 
   Municipio municipio = Municipio();
 
   // Itera sobre cada linha
   for (List row in data) {
-    String mun = row[0].split(';')[0];
+    String mun = row[0];
 
     if (mun != municipio.name) {
       if (municipio.name != null) {
@@ -23,16 +22,17 @@ void getCSVData() async {
       municipio.name = mun;
     }
 
-    String prop = row[0].split(';')[1];
+    String prop = row[1];
 
     if (prop == 'Telefone') {
-      municipio.telefones = row[0].split(';')[2];
+      municipio.telefones = row[2].toString().trim();
     } else if (prop == 'E-mail') {
-      municipio.emails = row[0].split(';')[2];
+      municipio.emails = row[2].toString().trim();
     } else if (prop == 'Link') {
-      municipio.site = row[0].split(';')[2];
+      municipio.site = row[2].toString().trim();
     } else if (prop == 'Endereço') {
-      municipio.endereco = row[0].split(';')[2];
+      // print(row[0]);
+      municipio.endereco = row[2].toString().trim();
     }
   }
 
@@ -47,6 +47,7 @@ void saveToJson(List<Municipio> municipios) async {
   }
 
   await Clipboard.setData(ClipboardData(text: json.toString()));
+  print("Copiado para área de transferência");
 }
 
 Future<List<List<dynamic>>> readCsv(String path) async {
@@ -54,7 +55,8 @@ Future<List<List<dynamic>>> readCsv(String path) async {
   String csv = await rootBundle.loadString(path);
 
   // Decode o CSV usando a biblioteca csv
-  List<List<dynamic>> rows = const CsvToListConverter().convert(csv);
+  List<List<dynamic>> rows =
+      const CsvToListConverter().convert(csv, fieldDelimiter: ';');
 
   return rows;
 }

@@ -52,4 +52,9 @@ class Municipio {
       site: site,
     );
   }
+
+  @override
+  String toString() {
+    return 'Municipio(name: $name, endereco: $endereco, telefones: $telefones, emails: $emails, site: $site)';
+  }
 }
