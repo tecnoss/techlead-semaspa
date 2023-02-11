@@ -47,6 +47,7 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                 child: ElevatedButton(
                   onPressed: () => {
                     Navigator.pop(context),
+                    context.read<ReportProvider>().sendEmail(),
                     // Navigator.pushReplacementNamed(
                     //   context,
                     //   '/denuncia_ouvidoria',
