@@ -3,6 +3,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:semasma/screens/app_splash_screen.dart';
 import 'package:semasma/screens/denuncia_ouvidoria/repository/municipio_provider.dart';
+import 'package:semasma/screens/denuncia_ouvidoria/repository/report_provider.dart';
 import 'package:semasma/screens/denuncia_ouvidoria/repository/subject_provider.dart';
 import 'package:semasma/screens/denuncia_ouvidoria/screens/info_screen.dart';
 import 'package:semasma/utils/app_theme.dart';
@@ -46,6 +47,10 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<MunicipioProvider>(
           create: (_) => MunicipioProvider(),
+          lazy: true,
+        ),
+        ChangeNotifierProvider<ReportProvider>(
+          create: (_) => ReportProvider(),
           lazy: true,
         ),
       ],

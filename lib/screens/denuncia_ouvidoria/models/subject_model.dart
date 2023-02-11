@@ -8,4 +8,15 @@ class Subject {
     required this.name,
     required this.competencia,
   });
+
+  @override
+  String toString() {
+    return '''
+      Subject {
+        escopo: $escopo,
+        name: $name,
+        competencia: $competencia,
+      }
+    ''';
+  }
 }

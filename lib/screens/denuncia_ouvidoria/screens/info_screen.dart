@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:provider/provider.dart';
+import 'package:semasma/screens/denuncia_ouvidoria/repository/report_provider.dart';
 import 'package:semasma/widgets/custom_button.dart';
 import 'package:semasma/widgets/custom_scaffold.dart';
+
+import '../models/subject_model.dart';
+import '../repository/subject_provider.dart';
 
 class DenunciaInfoScreen extends StatefulWidget {
   const DenunciaInfoScreen({Key? key}) : super(key: key);
@@ -13,6 +18,7 @@ class DenunciaInfoScreen extends StatefulWidget {
 class _DenunciaInfoScreenState extends State<DenunciaInfoScreen> {
   @override
   Widget build(BuildContext context) {
+    Subject subject = context.read<SubjectRepository>().selectedSubject;
     return CustomScaffold(
       appBarTitle: 'Ouvidoria',
       screenTitle: 'Informações necessárias para abertura da denúncia',
@@ -50,6 +56,7 @@ class _DenunciaInfoScreenState extends State<DenunciaInfoScreen> {
         ),
         CustomButton(
           onPressed: () {
+            context.read<ReportProvider>().subject = subject;
             Navigator.of(context).pushNamed(
               '/denuncia_ouvidoria/identification',
             );

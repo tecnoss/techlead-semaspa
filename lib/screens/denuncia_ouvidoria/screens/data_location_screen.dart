@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:provider/provider.dart';
+import 'package:semasma/screens/denuncia_ouvidoria/repository/report_provider.dart';
 import 'package:semasma/utils/app_colors.dart';
 import 'package:semasma/widgets/bottom_bar.dart';
 import 'package:semasma/widgets/screen_title.dart';
@@ -13,6 +15,10 @@ class DataLocationScreen extends StatefulWidget {
 }
 
 class _DataLocationScreenState extends State<DataLocationScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _messageController = TextEditingController();
+
   void _showConfirmationDialog() {
     showDialog(
       barrierDismissible: false,
@@ -41,10 +47,10 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                 child: ElevatedButton(
                   onPressed: () => {
                     Navigator.pop(context),
-                    Navigator.pushReplacementNamed(
-                      context,
-                      '/denuncia_ouvidoria',
-                    )
+                    // Navigator.pushReplacementNamed(
+                    //   context,
+                    //   '/denuncia_ouvidoria',
+                    // )
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -69,6 +75,7 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(context.read<ReportProvider>().toString());
     return Scaffold(
       appBar: AppBar(
         title: const TitleAppBar(
@@ -77,109 +84,128 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
       ),
       bottomNavigationBar: const BottomBar(),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const ScreenTitle(
-                title: 'Informe o que ocorreu?',
-              ),
-              16.height,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
-                    'Data do ocorrido:    /    /',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
+        child: Form(
+          key: _formKey,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const ScreenTitle(
+                  title: 'Informe o que ocorreu?',
+                ),
+                16.height,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    Text(
+                      'Data do ocorrido:    /    /',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
+                    Icon(Icons.calendar_month),
+                  ],
+                ),
+                16.height,
+                const Text(
+                  'Mensagem do ocorrido:',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
                   ),
-                  Icon(Icons.calendar_month),
-                ],
-              ),
-              16.height,
-              const Text(
-                'Mensagem do ocorrido:',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
                 ),
-              ),
-              const TextField(
-                maxLines: 15,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
-                ),
-                decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  isDense: true,
-                  filled: true,
-                  hintText: 'Digite a mensagem do ocorrido',
-                  hintStyle: TextStyle(
-                    color: Colors.black54,
+                TextFormField(
+                  controller: _messageController,
+                  keyboardType: TextInputType.multiline,
+                  validator: (String? value) {
+                    if (value!.isEmpty) {
+                      return 'Campo obrigatório';
+                    }
+                    return null;
+                  },
+                  maxLines: 15,
+                  style: const TextStyle(
+                    color: Colors.black,
                     fontSize: 12,
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(4),
+                  decoration: const InputDecoration(
+                    fillColor: Colors.white,
+                    isDense: true,
+                    filled: true,
+                    hintText: 'Digite a mensagem do ocorrido',
+                    hintStyle: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 12,
                     ),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-              ),
-              16.height,
-              const Text(
-                'Anexar Fotos e/ou Arquivos:',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              8.height,
-              Row(
-                children: [
-                  const Icon(
-                    Icons.picture_as_pdf,
-                    size: 36,
-                    color: appColorPrimary,
-                  ),
-                  16.width,
-                  const Icon(
-                    Icons.collections,
-                    size: 36,
-                    color: appColorPrimary,
-                  ),
-                  16.width,
-                  const Icon(
-                    Icons.photo_camera,
-                    size: 36,
-                    color: appColorPrimary,
-                  ),
-                ],
-              ),
-              32.height,
-              ElevatedButton(
-                onPressed: () => _showConfirmationDialog(),
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text(
-                    'Enviar',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(4),
+                      ),
+                      borderSide: BorderSide.none,
                     ),
                   ),
                 ),
-              ),
-            ],
+                16.height,
+                const Text(
+                  'Anexar Fotos e/ou Arquivos:',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                8.height,
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.picture_as_pdf,
+                      size: 36,
+                      color: appColorPrimary,
+                    ),
+                    16.width,
+                    const Icon(
+                      Icons.collections,
+                      size: 36,
+                      color: appColorPrimary,
+                    ),
+                    16.width,
+                    const Icon(
+                      Icons.photo_camera,
+                      size: 36,
+                      color: appColorPrimary,
+                    ),
+                  ],
+                ),
+                32.height,
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      context.read<ReportProvider>().message =
+                          _messageController.text;
+                      context.read<ReportProvider>().date =
+                          _dateController.text;
+                      _showConfirmationDialog();
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Text(
+                      'Enviar',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
