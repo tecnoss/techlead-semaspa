@@ -60,7 +60,7 @@ class ReportProvider extends ChangeNotifier {
     String format = "Html";
 
     try {
-      final response = await Dio().post(
+      await Dio().post(
         url,
         data: FormData.fromMap({
           "to": to,
@@ -69,11 +69,9 @@ class ReportProvider extends ChangeNotifier {
           "body": formatHTML(),
         }),
       );
-      print("Enviado com sucesso!");
-      print(response);
+      debugPrint("Enviado com sucesso!");
     } catch (e) {
-      print("Erro ao enviar email!");
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
