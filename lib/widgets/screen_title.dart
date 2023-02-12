@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ScreenTitle extends StatelessWidget {
   const ScreenTitle({super.key, required this.title});
@@ -11,9 +12,10 @@ class ScreenTitle extends StatelessWidget {
       child: Text(
         title,
         textAlign: TextAlign.center,
-        style: const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
+        style: GoogleFonts.openSans(
+          fontSize: 18.0,
+          fontWeight: FontWeight.w800,
+          color: Colors.black87,
         ),
       ),
     );
