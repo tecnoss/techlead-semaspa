@@ -6,6 +6,7 @@ class ReportProvider extends ChangeNotifier {
   Subject? subject;
   String? identification;
   String? email;
+  String? tipoLocalizacao;
   String? lat;
   String? lng;
   String? municipio;
@@ -30,6 +31,7 @@ class ReportProvider extends ChangeNotifier {
   }
 
   void setData({
+    required String tipoLocalizacao,
     required String lat,
     required String lng,
     required String municipio,
@@ -39,6 +41,7 @@ class ReportProvider extends ChangeNotifier {
     required String pontoReferencia,
     required String ncar,
   }) {
+    this.tipoLocalizacao = tipoLocalizacao;
     this.lat = lat;
     this.lng = lng;
     this.municipio = municipio;
@@ -52,25 +55,9 @@ class ReportProvider extends ChangeNotifier {
 
   Future<void> sendEmail() async {
     String to = "thiago.nascimento@techlead.com.br";
-    String subject = "[${this.subject!.escopo}][${this.subject!.name}]";
+    String subject =
+        "Denúncia de ${this.subject!.escopo} - ${this.subject!.name}";
     String format = "Html";
-
-    final Map<String, String> body = {
-      "identification": identification.toString(),
-      "email": email.toString(),
-      "lat": lat.toString(),
-      "lng": lng.toString(),
-      "municipio": municipio.toString(),
-      "endereco": endereco.toString(),
-      "numero": numero.toString(),
-      "bairro": bairro.toString(),
-      "pontoReferencia": pontoReferencia.toString(),
-      "ncar": ncar.toString(),
-      "date": date.toString(),
-      "message": message.toString(),
-    };
-
-    String formattedBody = bodyToHTML(body);
 
     try {
       final response = await Dio().post(
@@ -79,7 +66,7 @@ class ReportProvider extends ChangeNotifier {
           "to": to,
           "subject": subject,
           "format": format,
-          "body": formattedBody,
+          "body": formatHTML(),
         }),
       );
       print("Enviado com sucesso!");
@@ -90,11 +77,27 @@ class ReportProvider extends ChangeNotifier {
     }
   }
 
-  String bodyToHTML(Map<String, String> body) {
+  String formatHTML() {
     String html = "<html><body>";
-    body.forEach((key, value) {
-      html += "<p><b>$key</b>: $value</p>";
-    });
+    html += "<h3>DADOS DO USUÁRIO</h3>";
+    html += "<p><b>Nome</b>: $identification</p>";
+    html += "<p><b>E-mail</b>: ${email ?? ' -- '}</p><br><br>";
+
+    html += "<h3>LOCALIZAÇÃO DO ATO ILÍCITO</h3>";
+    html += "<p><b>Tipo de Localização</b>: $tipoLocalizacao</p>";
+    html += "<p><b>Latitude</b>: $lat</p>";
+    html += "<p><b>Longitude</b>: $lng</p>";
+    html += "<p><b>Município</b>: $municipio</p>";
+    html += "<p><b>Endereço</b>: $endereco</p>";
+    html += "<p><b>Número</b>: $numero</p>";
+    html += "<p><b>Bairro</b>: $bairro</p>";
+    html += "<p><b>Ponto de Referência</b>: $pontoReferencia</p>";
+    html += "<p><b>Número do CAR</b>: $ncar</p><br><br>";
+
+    html += "<h3>INFORMAÇÕES DO ATO ILÍCITO</h3>";
+    html += "<p><b>Data do Ocorrido</b>: $date</p>";
+    html += "<p><b>Mensagem do Ocorrido</b>: $message</p><br><br>";
+
     html += "</body></html>";
     return html;
   }

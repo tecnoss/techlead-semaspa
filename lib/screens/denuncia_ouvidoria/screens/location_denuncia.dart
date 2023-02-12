@@ -474,6 +474,8 @@ class _LocationDenunciaScreenState extends State<LocationDenunciaScreen> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       context.read<ReportProvider>().setData(
+                            tipoLocalizacao:
+                                sampleData[0].isSelected ? 'Urbano' : 'Rural',
                             lat: _latController.text,
                             lng: _longController.text,
                             municipio: _selectedCity!.name!,
