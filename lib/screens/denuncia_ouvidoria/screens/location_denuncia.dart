@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:semasma/utils/app_colors.dart';
@@ -112,9 +113,18 @@ class _LocationDenunciaScreenState extends State<LocationDenunciaScreen> {
                 ),
                 16.height,
                 Center(
-                  child: SvgPicture.asset(
-                    'assets/icons/ouvidoria/map.svg',
-                    height: 100,
+                  child: IconButton(
+                    iconSize: 100,
+                    onPressed: () async {
+                      final LatLng result = await Navigator.of(context)
+                          .pushNamed("/denuncia_ouvidoria/map") as LatLng;
+
+                      _latController.text = result.latitude.toString();
+                      _longController.text = result.longitude.toString();
+                    },
+                    icon: SvgPicture.asset(
+                      'assets/icons/ouvidoria/map.svg',
+                    ),
                   ),
                 ),
                 16.height,

@@ -5,6 +5,7 @@ import 'package:semasma/screens/app_splash_screen.dart';
 import 'package:semasma/screens/denuncia_ouvidoria/repository/municipio_provider.dart';
 import 'package:semasma/screens/denuncia_ouvidoria/repository/report_provider.dart';
 import 'package:semasma/screens/denuncia_ouvidoria/repository/subject_provider.dart';
+import 'package:semasma/screens/denuncia_ouvidoria/screens/coords_select.dart';
 import 'package:semasma/screens/denuncia_ouvidoria/screens/info_screen.dart';
 import 'package:semasma/utils/app_theme.dart';
 
@@ -115,6 +116,10 @@ class MyApp extends StatelessWidget {
             case '/denuncia_ouvidoria/location':
               return MaterialPageRoute(
                 builder: (context) => const LocationDenunciaScreen(),
+              );
+            case '/denuncia_ouvidoria/map':
+              return MaterialPageRoute(
+                builder: (context) => const MapScreen(),
               );
             case '/denuncia_ouvidoria/data_location':
               return MaterialPageRoute(

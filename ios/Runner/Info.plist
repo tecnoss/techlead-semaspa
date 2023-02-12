@@ -60,5 +60,10 @@
 		<string>sms</string>
 		<string>tel</string>
 	</array>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
+
+	<key>io.flutter.plugins.googlemaps.AIzaSyAqi3urYSGaEd6N9wOWw0ZFfx-a90BDXGw</key>
+	<string>AIzaSyAqi3urYSGaEd6N9wOWw0ZFfx-a90BDXGw</string>
 </dict>
 </plist>
