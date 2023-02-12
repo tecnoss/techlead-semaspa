@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:provider/provider.dart';
+import 'package:semasma/screens/denuncia_ouvidoria/repository/subject_provider.dart';
 import 'package:semasma/utils/app_colors.dart';
 import 'package:semasma/widgets/bottom_bar.dart';
 import 'package:semasma/widgets/leading.dart';
 import 'package:semasma/widgets/screen_title.dart';
 import 'package:semasma/widgets/title_app_bar.dart';
 
+import '../models/subject_model.dart';
+
 class SelectDenunciaScreenArguments {
   final String titleScreen;
-  final List<String> listOptions;
 
   SelectDenunciaScreenArguments({
     required this.titleScreen,
-    required this.listOptions,
   });
 }
 
@@ -20,22 +22,23 @@ class SelectDenunciaScreen extends StatefulWidget {
   const SelectDenunciaScreen({
     super.key,
     required this.titleScreen,
-    required this.listOptions,
   });
   final String titleScreen;
-  final List<String> listOptions;
 
   @override
   State<SelectDenunciaScreen> createState() => _SelectDenunciaScreenState();
 }
 
 class _SelectDenunciaScreenState extends State<SelectDenunciaScreen> {
-  final List<String> _searchList = [];
+  final List<Subject> _searchList = [];
   final TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    widget.listOptions.sort((a, b) => a.compareTo(b));
+    List<Subject> subjectList = context
+        .read<SubjectRepository>()
+        .getSubjectsByScope(widget.titleScreen);
+
     return Scaffold(
       appBar: AppBar(
         title: const TitleAppBar(
@@ -66,9 +69,11 @@ class _SelectDenunciaScreenState extends State<SelectDenunciaScreen> {
                 onChanged: (value) => setState(() {
                   _searchList.clear();
                   if (value.isNotEmpty) {
-                    for (var element in widget.listOptions) {
-                      if (element.toLowerCase().contains(value.toLowerCase())) {
-                        _searchList.add(element);
+                    for (Subject sub in subjectList) {
+                      if (sub.name
+                          .toLowerCase()
+                          .contains(value.toLowerCase())) {
+                        _searchList.add(sub);
                       }
                     }
                   }
@@ -117,11 +122,11 @@ class _SelectDenunciaScreenState extends State<SelectDenunciaScreen> {
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: _searchList.isNotEmpty
                           ? _searchList.length
-                          : widget.listOptions.length,
+                          : subjectList.length,
                       itemBuilder: (context, index) {
-                        var option = _searchList.isNotEmpty
+                        Subject option = _searchList.isNotEmpty
                             ? _searchList[index]
-                            : widget.listOptions[index];
+                            : subjectList[index];
                         return Container(
                           margin: const EdgeInsets.only(bottom: 8.0),
                           decoration: BoxDecoration(
@@ -134,12 +139,21 @@ class _SelectDenunciaScreenState extends State<SelectDenunciaScreen> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              Navigator.pushNamed(context,
-                                  '/denuncia_ouvidoria/identification');
+                              context
+                                  .read<SubjectRepository>()
+                                  .selectedSubject = option;
+
+                              if (option.competencia == 'Município') {
+                                Navigator.pushNamed(
+                                    context, '/denuncia_ouvidoria/city');
+                              } else {
+                                Navigator.pushNamed(
+                                    context, '/denuncia_ouvidoria/info');
+                              }
                             },
                             child: ListTile(
                               title: Text(
-                                option,
+                                option.name,
                                 style: const TextStyle(
                                   fontSize: 12.0,
                                   color: Colors.black,

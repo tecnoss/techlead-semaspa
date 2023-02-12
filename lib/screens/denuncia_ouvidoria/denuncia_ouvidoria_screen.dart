@@ -5,7 +5,7 @@ import 'package:semasma/widgets/leading.dart';
 import 'package:semasma/widgets/screen_title.dart';
 import 'package:semasma/widgets/title_app_bar.dart';
 
-import 'select_denuncia_screen.dart';
+import 'screens/select_denuncia_screen.dart';
 
 class DenunciaOuvidoriaScreen extends StatefulWidget {
   const DenunciaOuvidoriaScreen({super.key});
@@ -16,35 +16,6 @@ class DenunciaOuvidoriaScreen extends StatefulWidget {
 }
 
 class _DenunciaOuvidoriaScreenState extends State<DenunciaOuvidoriaScreen> {
-  final List<String> _crimesAmbientaisList = [
-    'Desmatamento',
-    'Poluição do Rio',
-    'Queimada',
-    'Poluição do Ar',
-    'Poluição Sonora',
-    'Assoreamento',
-    'Desmatamento e Aterramento das Nascentes',
-    'Poluição Hídrica',
-    'Extração Minerária Ilegal',
-    'Extração de Madeira Ilegal',
-    'Extração de Area Ilegal',
-    'Descarte Inadequado de Resíduos',
-  ];
-
-  final List<String> _irregularidadesEmpreendimentos = [
-    'Empreendimento Atuando sem CEPROF',
-    'Empresa Atuando sem Licença Ambiental',
-    'Serraria Clandestina',
-    'Carvoaria Irregular',
-    'Terreno Abandonado',
-    'Abastecimento de Balsa em Local Inadequado',
-    'Instalação Irregular de Subestação de Energia Elétrica',
-    'Armazenamento Irregular de Caroço de Açaí',
-    'Comércio Ilegal de Carne Animal',
-    'CAR Irregular',
-    'Sobreposição de CAR',
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,7 +57,6 @@ class _DenunciaOuvidoriaScreenState extends State<DenunciaOuvidoriaScreen> {
                       '/denuncia_ouvidoria/select_denuncia',
                       arguments: SelectDenunciaScreenArguments(
                         titleScreen: 'Crimes Ambientais',
-                        listOptions: _crimesAmbientaisList,
                       ),
                     ),
                   ),
@@ -99,7 +69,6 @@ class _DenunciaOuvidoriaScreenState extends State<DenunciaOuvidoriaScreen> {
                       '/denuncia_ouvidoria/select_denuncia',
                       arguments: SelectDenunciaScreenArguments(
                         titleScreen: 'Irregularidade de Empreendimentos',
-                        listOptions: _irregularidadesEmpreendimentos,
                       ),
                     ),
                   ),
@@ -112,7 +81,6 @@ class _DenunciaOuvidoriaScreenState extends State<DenunciaOuvidoriaScreen> {
                       '/denuncia_ouvidoria/select_denuncia',
                       arguments: SelectDenunciaScreenArguments(
                         titleScreen: 'Irregularidade no Serviço Público',
-                        listOptions: _crimesAmbientaisList,
                       ),
                     ),
                   ),
