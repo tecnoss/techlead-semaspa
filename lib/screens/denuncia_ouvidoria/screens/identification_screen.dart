@@ -86,6 +86,7 @@ class _IdentificationScreenState extends State<IdentificationScreen> {
       appBar: AppBar(
         title: const TitleAppBar(title: 'Ouvidoria'),
         leading: const Leading(),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),

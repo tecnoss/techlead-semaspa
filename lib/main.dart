@@ -119,7 +119,9 @@ class MyApp extends StatelessWidget {
               );
             case '/denuncia_ouvidoria/map':
               return MaterialPageRoute(
-                builder: (context) => const MapScreen(),
+                builder: (context) => MapScreen(
+                  coords: settings.arguments as Map,
+                ),
               );
             case '/denuncia_ouvidoria/data_location':
               return MaterialPageRoute(
