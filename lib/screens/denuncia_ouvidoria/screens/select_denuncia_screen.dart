@@ -45,6 +45,7 @@ class _SelectDenunciaScreenState extends State<SelectDenunciaScreen> {
           title: 'Ouvidoria',
         ),
         leading: const Leading(),
+        centerTitle: true,
       ),
       bottomNavigationBar: const BottomBar(),
       body: SingleChildScrollView(
