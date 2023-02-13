@@ -1,4 +1,7 @@
+import 'package:file_picker/file_picker.dart';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:semasma/screens/denuncia_ouvidoria/repository/report_provider.dart';
@@ -16,8 +19,9 @@ class DataLocationScreen extends StatefulWidget {
 
 class _DataLocationScreenState extends State<DataLocationScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _dateController = TextEditingController();
   final TextEditingController _messageController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  String? _pdfName;
 
   void _showConfirmationDialog() {
     showDialog(
@@ -29,42 +33,82 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
-                Icons.check_circle,
-                size: 64,
-                color: Colors.green,
+              Consumer<ReportProvider>(
+                builder: (context, reportProvider, child) {
+                  if (!reportProvider.isLoading &&
+                      reportProvider.trySend &&
+                      reportProvider.success) {
+                    return const Icon(
+                      Icons.check_circle,
+                      size: 64,
+                      color: Colors.green,
+                    );
+                  }
+
+                  if (reportProvider.trySend && !reportProvider.success) {
+                    return const Icon(
+                      Icons.error,
+                      size: 64,
+                      color: Colors.red,
+                    );
+                  }
+
+                  return Container();
+                },
               ),
               16.height,
-              const Text(
-                'Sua dunúncia foi enviada com sucesso!!!',
-                style: TextStyle(
-                  fontSize: 12,
-                ),
+              Consumer<ReportProvider>(
+                builder: (context, reportProvider, child) {
+                  if (reportProvider.isLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  if (reportProvider.trySend && !reportProvider.success) {
+                    return const Text(
+                      'Ocorreu um erro ao enviar sua denúncia, tente novamente mais tarde.',
+                      style: TextStyle(
+                        fontSize: 12,
+                      ),
+                    );
+                  }
+
+                  return const Text(
+                    'Sua denúncia foi enviada com sucesso!!!',
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  );
+                },
               ),
               48.height,
               SizedBox(
                 height: 40,
-                child: ElevatedButton(
-                  onPressed: () => {
-                    Navigator.pop(context),
-                    context.read<ReportProvider>().sendEmail(),
-                    // Navigator.pushReplacementNamed(
-                    //   context,
-                    //   '/denuncia_ouvidoria',
-                    // )
+                child: Consumer<ReportProvider>(
+                  builder: (context, reportProvider, child) {
+                    bool isLoading = reportProvider.isLoading;
+                    return ElevatedButton(
+                      onPressed: isLoading
+                          ? null
+                          : () => {
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    "/home", (route) => false),
+                              },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                      child: Text(
+                        isLoading ? 'Enviando...' : 'OK',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    );
                   },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                  child: const Text(
-                    'OK',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
                 ),
               ),
             ],
@@ -74,14 +118,27 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
     );
   }
 
+  Future<PlatformFile?> _selectPdf() async {
+    final file = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
+
+    if (file == null) {
+      return null;
+    }
+
+    return file.files.single;
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(context.read<ReportProvider>().toString());
     return Scaffold(
       appBar: AppBar(
         title: const TitleAppBar(
           title: 'Ouvidoria',
         ),
+        centerTitle: true,
       ),
       bottomNavigationBar: const BottomBar(),
       body: SingleChildScrollView(
@@ -97,16 +154,60 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                 ),
                 16.height,
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
-                      'Data do ocorrido:    /    /',
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Data do ocorrido:',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Icon(Icons.calendar_month),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12.0),
+                      child: Text(
+                        _dateController.text == ''
+                            ? '       /       /      '
+                            : _dateController.text,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      icon: const Icon(Icons.calendar_month),
+                      onPressed: () async {
+                        final DateTime? picked =
+                            await DatePicker.showDatePicker(
+                          context,
+                          showTitleActions: true,
+                          maxTime: DateTime.now(),
+                          theme: const DatePickerTheme(
+                            headerColor: appColorPrimary,
+                            backgroundColor: Colors.white,
+                            itemStyle: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                            doneStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                          locale: LocaleType.pt,
+                        );
+                        if (picked != null) {
+                          String formatDate =
+                              '${picked.toString().substring(8, 10)}/${picked.toString().substring(5, 7)}/${picked.toString().substring(0, 4)}';
+                          setState(() {
+                            _dateController.text = formatDate;
+                          });
+                        }
+                      },
+                    ),
                   ],
                 ),
                 16.height,
@@ -159,23 +260,43 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                 8.height,
                 Row(
                   children: [
-                    const Icon(
-                      Icons.picture_as_pdf,
-                      size: 36,
-                      color: appColorPrimary,
+                    IconButton(
+                      onPressed: () async {
+                        final file = await _selectPdf();
+
+                        if (file != null) {
+                          context.read<ReportProvider>().files = file.path;
+                          setState(() {
+                            _pdfName = file.name;
+                          });
+                        }
+                      },
+                      icon: const Icon(
+                        Icons.picture_as_pdf,
+                        size: 36,
+                        color: appColorPrimary,
+                      ),
                     ),
                     16.width,
-                    const Icon(
-                      Icons.collections,
-                      size: 36,
-                      color: appColorPrimary,
+                    Text(
+                      _pdfName ?? "",
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    16.width,
-                    const Icon(
-                      Icons.photo_camera,
-                      size: 36,
-                      color: appColorPrimary,
-                    ),
+                    // 16.width,
+                    // const Icon(
+                    //   Icons.collections,
+                    //   size: 36,
+                    //   color: appColorPrimary,
+                    // ),
+                    // 16.width,
+                    // const Icon(
+                    //   Icons.photo_camera,
+                    //   size: 36,
+                    //   color: appColorPrimary,
+                    // ),
                   ],
                 ),
                 32.height,
@@ -186,6 +307,13 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                           _messageController.text;
                       context.read<ReportProvider>().date =
                           _dateController.text;
+
+                      context
+                          .read<ReportProvider>()
+                          .sendEmail()
+                          .then((value) => {print("sucesso")})
+                          .catchError((onError) => {print(onError)});
+
                       _showConfirmationDialog();
                     }
                   },

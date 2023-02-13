@@ -21,6 +21,7 @@ class CustomScaffold extends StatelessWidget {
       appBar: AppBar(
         title: TitleAppBar(title: appBarTitle),
         leading: const Leading(),
+        centerTitle: true,
       ),
       bottomNavigationBar: const BottomBar(),
       body: SingleChildScrollView(

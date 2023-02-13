@@ -17,6 +17,28 @@ class ReportProvider extends ChangeNotifier {
   String? ncar;
   String? date;
   String? message;
+  String? files;
+
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+  set isLoading(bool value) {
+    _isLoading = value;
+    notifyListeners();
+  }
+
+  bool _success = false;
+  bool get success => _success;
+  set success(bool value) {
+    _success = value;
+    notifyListeners();
+  }
+
+  bool _trySend = false;
+  bool get trySend => _trySend;
+  set trySend(bool value) {
+    _trySend = value;
+    notifyListeners();
+  }
 
   final String url =
       "http://appmobile-integracao.semas.pa.gov.br:8443/api/mail/send";
@@ -27,6 +49,11 @@ class ReportProvider extends ChangeNotifier {
   }) {
     this.date = date;
     this.message = message;
+    notifyListeners();
+  }
+
+  addFiles(String file) {
+    files = file;
     notifyListeners();
   }
 
@@ -60,6 +87,8 @@ class ReportProvider extends ChangeNotifier {
     String format = "Html";
 
     try {
+      trySend = true;
+      isLoading = true;
       await Dio().post(
         url,
         data: FormData.fromMap({
@@ -67,11 +96,16 @@ class ReportProvider extends ChangeNotifier {
           "subject": subject,
           "format": format,
           "body": formatHTML(),
+          "attachments": MultipartFile.fromFileSync(files!),
         }),
       );
       debugPrint("Enviado com sucesso!");
+      success = true;
+      isLoading = false;
     } catch (e) {
       debugPrint(e.toString());
+      success = false;
+      isLoading = false;
     }
   }
 
