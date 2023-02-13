@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:semasma/screens/denuncia_ouvidoria/repository/report_provider.dart';
@@ -16,7 +17,7 @@ class DataLocationScreen extends StatefulWidget {
 
 class _DataLocationScreenState extends State<DataLocationScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _dateController = TextEditingController();
+  final String _selectedDate = 'Selecione uma data';
   final TextEditingController _messageController = TextEditingController();
 
   void _showConfirmationDialog() {
@@ -76,12 +77,12 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(context.read<ReportProvider>().toString());
     return Scaffold(
       appBar: AppBar(
         title: const TitleAppBar(
           title: 'Ouvidoria',
         ),
+        centerTitle: true,
       ),
       bottomNavigationBar: const BottomBar(),
       body: SingleChildScrollView(
@@ -98,15 +99,26 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                 16.height,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
-                      'Data do ocorrido:    /    /',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  children: [
+                    TextFormField(
+                      decoration: const InputDecoration(labelText: 'Date'),
+                      readOnly: true,
+                      onTap: () {
+                        // DatePicker.showDatePicker(
+                        //   context,
+                        //   showTitleActions: true,
+                        //   minTime: DateTime(1900, 1, 1),
+                        //   maxTime: DateTime.now(),
+                        //   onConfirm: (date) {
+                        //     setState(() {
+                        //       _selectedDate = date.toString().substring(0, 10);
+                        //     });
+                        //   },
+                        // );
+                      },
+                      initialValue: _selectedDate,
                     ),
-                    Icon(Icons.calendar_month),
+                    const Icon(Icons.calendar_month),
                   ],
                 ),
                 16.height,
@@ -184,8 +196,7 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                     if (_formKey.currentState!.validate()) {
                       context.read<ReportProvider>().message =
                           _messageController.text;
-                      context.read<ReportProvider>().date =
-                          _dateController.text;
+
                       _showConfirmationDialog();
                     }
                   },
