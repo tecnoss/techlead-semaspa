@@ -9,7 +9,7 @@ import connectivity_plus
 import geolocator_apple
 import location
 import nb_utils
-import path_provider_macos
+import path_provider_foundation
 import shared_preferences_macos
 import url_launcher_macos
 
