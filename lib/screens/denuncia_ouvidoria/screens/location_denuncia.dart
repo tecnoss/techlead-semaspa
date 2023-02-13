@@ -24,6 +24,7 @@ class LocationDenunciaScreen extends StatefulWidget {
 
 class _LocationDenunciaScreenState extends State<LocationDenunciaScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
 
   List<RadioModel> sampleData = <RadioModel>[
     RadioModel(true, 'Urbano'),
@@ -49,11 +50,26 @@ class _LocationDenunciaScreenState extends State<LocationDenunciaScreen> {
       _determinePosition().then((value) {
         _latController.text = value.latitude.toString();
         _longController.text = value.longitude.toString();
+        setState(() {
+          _isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Localização obtida com sucesso!'),
+          ),
+        );
       }).onError((error, stackTrace) {
-        print(error);
+        setState(() {
+          _isLoading = false;
+        });
+        debugPrint(error.toString());
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Tente selecionar sua localização manualmente!'),
+          ),
+        );
       });
     });
-    print("Aqui");
   }
 
   Future<Position> _determinePosition() async {
@@ -90,6 +106,9 @@ class _LocationDenunciaScreenState extends State<LocationDenunciaScreen> {
 
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
+    setState(() {
+      _isLoading = true;
+    });
     return await Geolocator.getCurrentPosition();
   }
 
@@ -200,6 +219,21 @@ class _LocationDenunciaScreenState extends State<LocationDenunciaScreen> {
                   ),
                 ),
                 16.height,
+                _isLoading
+                    ? Column(
+                        children: const [
+                          Center(child: CircularProgressIndicator()),
+                          Text(
+                            'Buscando sua localização...',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      )
+                    : 0.height,
                 const Text(
                   'Latitude:',
                   style: TextStyle(

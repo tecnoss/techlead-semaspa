@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:semasma/screens/denuncia_ouvidoria/repository/report_provider.dart';
@@ -16,8 +17,8 @@ class DataLocationScreen extends StatefulWidget {
 
 class _DataLocationScreenState extends State<DataLocationScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _dateController = TextEditingController();
   final TextEditingController _messageController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
 
   void _showConfirmationDialog() {
     showDialog(
@@ -76,12 +77,12 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(context.read<ReportProvider>().toString());
     return Scaffold(
       appBar: AppBar(
         title: const TitleAppBar(
           title: 'Ouvidoria',
         ),
+        centerTitle: true,
       ),
       bottomNavigationBar: const BottomBar(),
       body: SingleChildScrollView(
@@ -97,16 +98,60 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                 ),
                 16.height,
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
-                      'Data do ocorrido:    /    /',
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Data do ocorrido:',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Icon(Icons.calendar_month),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12.0),
+                      child: Text(
+                        _dateController.text == ''
+                            ? '       /       /      '
+                            : _dateController.text,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      icon: const Icon(Icons.calendar_month),
+                      onPressed: () async {
+                        final DateTime? picked =
+                            await DatePicker.showDatePicker(
+                          context,
+                          showTitleActions: true,
+                          maxTime: DateTime.now(),
+                          theme: const DatePickerTheme(
+                            headerColor: appColorPrimary,
+                            backgroundColor: Colors.white,
+                            itemStyle: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                            doneStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                          locale: LocaleType.pt,
+                        );
+                        if (picked != null) {
+                          String formatDate =
+                              '${picked.toString().substring(8, 10)}/${picked.toString().substring(5, 7)}/${picked.toString().substring(0, 4)}';
+                          setState(() {
+                            _dateController.text = formatDate;
+                          });
+                        }
+                      },
+                    ),
                   ],
                 ),
                 16.height,
@@ -186,6 +231,7 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                           _messageController.text;
                       context.read<ReportProvider>().date =
                           _dateController.text;
+
                       _showConfirmationDialog();
                     }
                   },
