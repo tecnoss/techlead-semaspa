@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:semasma/screens/denuncia_ouvidoria/repository/report_provider.dart';
@@ -22,6 +25,7 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
   final TextEditingController _messageController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
   String? _pdfName;
+  XFile? _imageFile;
 
   void _showConfirmationDialog() {
     showDialog(
@@ -129,6 +133,67 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
     }
 
     return file.files.single;
+  }
+
+  Future<void> _openGallery() async {
+    final imagePicker = ImagePicker();
+    final XFile? image =
+        await imagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _imageFile = image;
+    });
+  }
+
+  Future<void> _deleteImage() async {
+    _showDialogConfirmation(
+      title: 'Excluir imagem',
+      message: 'Deseja realmente excluir a imagem?',
+      onConfirm: () {
+        setState(() {
+          _imageFile = null;
+        });
+        Navigator.of(context).pop();
+      },
+    );
+  }
+
+  Future<void> _deletePdf() async {
+    _showDialogConfirmation(
+      title: 'Excluir PDF',
+      message: 'Deseja realmente excluir o PDF?',
+      onConfirm: () {
+        setState(() {
+          _pdfName = null;
+        });
+        Navigator.of(context).pop();
+      },
+    );
+  }
+
+  void _showDialogConfirmation({
+    required String title,
+    required String message,
+    required VoidCallback onConfirm,
+  }) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: onConfirm,
+              child: const Text('Confirmar'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -285,6 +350,17 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    16.width,
+                    IconButton(
+                      onPressed: () async {
+                        await _openGallery();
+                      },
+                      icon: const Icon(
+                        Icons.collections,
+                        size: 36,
+                        color: appColorPrimary,
+                      ),
+                    ),
                     // 16.width,
                     // const Icon(
                     //   Icons.collections,
@@ -299,6 +375,36 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                     // ),
                   ],
                 ),
+                16.height,
+                Row(
+                  children: [
+                    _imageFile != null
+                        ? Stack(
+                            children: [
+                              Image.file(
+                                File(_imageFile!.path),
+                                height: 50,
+                                width: 50,
+                                fit: BoxFit.cover,
+                              ),
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    await _deleteImage();
+                                  },
+                                  child: const Icon(
+                                    Icons.close,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        : Container(),
+                  ],
+                ),
                 32.height,
                 ElevatedButton(
                   onPressed: () {
@@ -311,8 +417,8 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                       context
                           .read<ReportProvider>()
                           .sendEmail()
-                          .then((value) => {print("sucesso")})
-                          .catchError((onError) => {print(onError)});
+                          .then((value) => {debugPrint("sucesso")})
+                          .catchError((onError) => {debugPrint(onError)});
 
                       _showConfirmationDialog();
                     }
