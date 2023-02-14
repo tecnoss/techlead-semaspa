@@ -170,6 +170,15 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
     );
   }
 
+  Future<void> _openCamera() async {
+    final imagePicker = ImagePicker();
+    final XFile? image =
+        await imagePicker.pickImage(source: ImageSource.camera);
+    setState(() {
+      _imageFile = image;
+    });
+  }
+
   void _showDialogConfirmation({
     required String title,
     required String message,
@@ -361,18 +370,17 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                         color: appColorPrimary,
                       ),
                     ),
-                    // 16.width,
-                    // const Icon(
-                    //   Icons.collections,
-                    //   size: 36,
-                    //   color: appColorPrimary,
-                    // ),
-                    // 16.width,
-                    // const Icon(
-                    //   Icons.photo_camera,
-                    //   size: 36,
-                    //   color: appColorPrimary,
-                    // ),
+                    16.width,
+                    IconButton(
+                      onPressed: () async {
+                        await _openCamera();
+                      },
+                      icon: const Icon(
+                        Icons.photo_camera,
+                        size: 36,
+                        color: appColorPrimary,
+                      ),
+                    ),
                   ],
                 ),
                 16.height,
