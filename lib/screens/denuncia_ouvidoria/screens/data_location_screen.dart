@@ -13,6 +13,19 @@ import 'package:semasma/widgets/bottom_bar.dart';
 import 'package:semasma/widgets/screen_title.dart';
 import 'package:semasma/widgets/title_app_bar.dart';
 
+class PDFModel {
+  final String name;
+  final String path;
+  late String id;
+
+  PDFModel({
+    required this.name,
+    required this.path,
+  }) {
+    id = DateTime.now().millisecondsSinceEpoch.toString();
+  }
+}
+
 class DataLocationScreen extends StatefulWidget {
   const DataLocationScreen({super.key});
 
@@ -24,7 +37,7 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _messageController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
-  String? _pdfName;
+  final List<PDFModel> _pdfName = [];
   XFile? _imageFile;
 
   void _showConfirmationDialog() {
@@ -157,13 +170,13 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
     );
   }
 
-  Future<void> _deletePdf() async {
+  Future<void> _deletePdf(String id) async {
     _showDialogConfirmation(
       title: 'Excluir PDF',
       message: 'Deseja realmente excluir o PDF?',
       onConfirm: () {
         setState(() {
-          _pdfName = null;
+          _pdfName.removeWhere((element) => element.id == id);
         });
         Navigator.of(context).pop();
       },
@@ -339,9 +352,10 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                         final file = await _selectPdf();
 
                         if (file != null) {
-                          context.read<ReportProvider>().files = file.path;
                           setState(() {
-                            _pdfName = file.name;
+                            _pdfName.add(
+                              PDFModel(name: file.name, path: file.path!),
+                            );
                           });
                         }
                       },
@@ -352,14 +366,14 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                       ),
                     ),
                     16.width,
-                    Text(
-                      _pdfName ?? "",
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    16.width,
+                    // Text(
+                    //   _pdfName ?? "",
+                    //   style: const TextStyle(
+                    //     fontSize: 12,
+                    //     fontWeight: FontWeight.bold,
+                    //   ),
+                    // ),
+                    // 16.width,
                     IconButton(
                       onPressed: () async {
                         await _openGallery();
@@ -384,6 +398,53 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                   ],
                 ),
                 16.height,
+                _pdfName.isNotEmpty
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Arquivos PDF anexados:',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          8.height,
+                          ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: _pdfName.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    Icons.attach_file,
+                                    color: appColorPrimary,
+                                  ),
+                                  Text(
+                                    _pdfName[index].name,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      // fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  8.width,
+                                  GestureDetector(
+                                    onTap: () async {
+                                      await _deletePdf(_pdfName[index].id);
+                                    },
+                                    child: const Icon(
+                                      Icons.close,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        ],
+                      )
+                    : Container(),
                 Row(
                   children: [
                     _imageFile != null
