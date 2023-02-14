@@ -1,6 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:semasma/screens/denuncia_ouvidoria/models/subject_model.dart';
+import 'package:http/http.dart' as http;
 
 class ReportProvider extends ChangeNotifier {
   Subject? subject;
@@ -17,7 +17,7 @@ class ReportProvider extends ChangeNotifier {
   String? ncar;
   String? date;
   String? message;
-  String? files;
+  List<String>? files;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -53,7 +53,12 @@ class ReportProvider extends ChangeNotifier {
   }
 
   addFiles(String file) {
-    files = file;
+    files!.add(file);
+    notifyListeners();
+  }
+
+  void setFiles(List<String> files) {
+    this.files = files;
     notifyListeners();
   }
 
@@ -81,32 +86,59 @@ class ReportProvider extends ChangeNotifier {
   }
 
   Future<void> sendEmail() async {
-    String to = "thiago.nascimento@techlead.com.br";
+    String to = "joao.costa@techlead.com.br";
     String subject =
         "Denúncia de ${this.subject!.escopo} - ${this.subject!.name}";
     String format = "Html";
 
+    // Criar um objeto MultipartRequest
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+
+    if (files != null) {
+      for (var file in files!) {
+        request.files
+            .add(await http.MultipartFile.fromPath('attachments', file));
+      }
+    }
+
     try {
       trySend = true;
       isLoading = true;
-      await Dio().post(
-        url,
-        data: FormData.fromMap({
-          "to": to,
-          "subject": subject,
-          "format": format,
-          "body": formatHTML(),
-          "attachments": MultipartFile.fromFileSync(files!),
-        }),
-      );
+
+      request.fields['to'] = to;
+      request.fields['subject'] = subject;
+      request.fields['format'] = format;
+      request.fields['body'] = formatHTML();
+
+      await request.send();
       debugPrint("Enviado com sucesso!");
       success = true;
       isLoading = false;
+      _resetFields();
     } catch (e) {
       debugPrint(e.toString());
       success = false;
       isLoading = false;
     }
+  }
+
+  void _resetFields() {
+    subject = null;
+    identification = null;
+    email = null;
+    tipoLocalizacao = null;
+    lat = null;
+    lng = null;
+    municipio = null;
+    endereco = null;
+    numero = null;
+    bairro = null;
+    pontoReferencia = null;
+    ncar = null;
+    date = null;
+    message = null;
+    files = [];
+    notifyListeners();
   }
 
   String formatHTML() {
