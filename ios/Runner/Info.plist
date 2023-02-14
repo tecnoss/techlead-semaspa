@@ -65,5 +65,9 @@
 
 	<key>io.flutter.plugins.googlemaps.AIzaSyAqi3urYSGaEd6N9wOWw0ZFfx-a90BDXGw</key>
 	<string>AIzaSyAqi3urYSGaEd6N9wOWw0ZFfx-a90BDXGw</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Selecione uma imagem da sua galeria.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Tirar uma foto ou gravar um vídeo.</string>
 </dict>
 </plist>
