@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     {
       "icon": "assets/icons/home/denuncia_ouvidoria.png",
       "title": "Realizar Denúncias na Ouvidoria",
-      "route": "/denuncia_ouvidoria/data_location",
+      "route": "/denuncia_ouvidoria",
     },
     // {
     //   "icon": "assets/icons/home/catis.png",
