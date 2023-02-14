@@ -16,11 +16,13 @@ import 'package:semasma/widgets/title_app_bar.dart';
 class PDFModel {
   final String name;
   final String path;
+  final int size;
   late String id;
 
   PDFModel({
     required this.name,
     required this.path,
+    required this.size,
   }) {
     id = DateTime.now().millisecondsSinceEpoch.toString();
   }
@@ -29,9 +31,11 @@ class PDFModel {
 class ImageModel {
   final File image;
   late String id;
+  final int size;
 
   ImageModel({
     required this.image,
+    required this.size,
   }) {
     id = DateTime.now().millisecondsSinceEpoch.toString();
   }
@@ -50,6 +54,8 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
   final TextEditingController _dateController = TextEditingController();
   final List<PDFModel> _pdfName = [];
   final List<ImageModel> _imageFiles = [];
+  final int limitSize = 20971000;
+  int totalSize = 0;
 
   void _showConfirmationDialog() {
     showDialog(
@@ -146,17 +152,37 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
     );
   }
 
-  Future<PlatformFile?> _selectPdf() async {
+  void _updateSize(int size, bool isAdd) {
+    if (isAdd) {
+      setState(() {
+        totalSize += size;
+      });
+    } else {
+      setState(() {
+        totalSize -= size;
+      });
+    }
+  }
+
+  Future<void> _selectPdf() async {
     final file = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf'],
     );
 
     if (file == null) {
-      return null;
+      return;
     }
 
-    return file.files.single;
+    setState(() {
+      _pdfName.add(PDFModel(
+        name: file.files.single.name,
+        path: file.files.single.path!,
+        size: file.files.single.size,
+      ));
+    });
+
+    _updateSize(file.files.single.size, true);
   }
 
   Future<void> _selectImage(ImageSource source) async {
@@ -167,9 +193,17 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
       return;
     }
 
+    File file = File(image.path);
+    int size = await file.length();
+
     setState(() {
-      _imageFiles.add(ImageModel(image: File(image.path)));
+      _imageFiles.add(ImageModel(
+        image: file,
+        size: size,
+      ));
     });
+
+    _updateSize(await file.length(), true);
   }
 
   Future<void> _deleteImage(String id) async {
@@ -178,8 +212,12 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
       message: 'Deseja realmente excluir a imagem?',
       onConfirm: () {
         setState(() {
+          _updateSize(
+              _imageFiles.firstWhere((element) => element.id == id).size,
+              false);
           _imageFiles.removeWhere((element) => element.id == id);
         });
+
         Navigator.of(context).pop();
       },
     );
@@ -191,6 +229,8 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
       message: 'Deseja realmente excluir o PDF?',
       onConfirm: () {
         setState(() {
+          _updateSize(
+              _pdfName.firstWhere((element) => element.id == id).size, false);
           _pdfName.removeWhere((element) => element.id == id);
         });
         Navigator.of(context).pop();
@@ -354,17 +394,7 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                 Row(
                   children: [
                     IconButton(
-                      onPressed: () async {
-                        final file = await _selectPdf();
-
-                        if (file != null) {
-                          setState(() {
-                            _pdfName.add(
-                              PDFModel(name: file.name, path: file.path!),
-                            );
-                          });
-                        }
-                      },
+                      onPressed: _selectPdf,
                       icon: const Icon(
                         Icons.picture_as_pdf,
                         size: 36,
@@ -396,6 +426,13 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                   ],
                 ),
                 16.height,
+                Text(
+                  'Tamanho total dos arquivos: ${(totalSize / 1048576).toStringAsFixed(2)} MB / 20 MB',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 _pdfName.isNotEmpty
                     ? Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -403,7 +440,6 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                           const Text(
                             'Arquivos PDF anexados:',
                             style: TextStyle(
-                              fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
