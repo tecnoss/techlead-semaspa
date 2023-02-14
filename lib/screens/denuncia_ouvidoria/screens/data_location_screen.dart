@@ -32,10 +32,12 @@ class ImageModel {
   final File image;
   late String id;
   final int size;
+  final String path;
 
   ImageModel({
     required this.image,
     required this.size,
+    required this.path,
   }) {
     id = DateTime.now().millisecondsSinceEpoch.toString();
   }
@@ -126,6 +128,7 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                       onPressed: isLoading
                           ? null
                           : () => {
+                                Navigator.of(context).pop(),
                                 Navigator.of(context).pushNamedAndRemoveUntil(
                                     "/home", (route) => false),
                               },
@@ -200,6 +203,7 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
       _imageFiles.add(ImageModel(
         image: file,
         size: size,
+        path: file.path,
       ));
     });
 
@@ -257,6 +261,25 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
             TextButton(
               onPressed: onConfirm,
               child: const Text('Confirmar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showAlertLimitDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Anexos muito grandes'),
+          content: const Text(
+              'Os anexos ultrapassaram 20MB. Remova alguns anexos para enviar o email.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
             ),
           ],
         );
@@ -552,10 +575,24 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
+                      if (totalSize > limitSize) {
+                        _showAlertLimitDialog();
+                        return;
+                      }
+
+                      List<String> fileToSend = [];
+                      for (var element in _pdfName) {
+                        fileToSend.add(element.path);
+                      }
+                      for (var element in _imageFiles) {
+                        fileToSend.add(element.path);
+                      }
+
                       context.read<ReportProvider>().message =
                           _messageController.text;
                       context.read<ReportProvider>().date =
                           _dateController.text;
+                      context.read<ReportProvider>().setFiles(fileToSend);
 
                       context
                           .read<ReportProvider>()
