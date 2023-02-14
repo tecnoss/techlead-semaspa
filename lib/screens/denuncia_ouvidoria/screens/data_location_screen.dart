@@ -26,6 +26,17 @@ class PDFModel {
   }
 }
 
+class ImageModel {
+  final File image;
+  late String id;
+
+  ImageModel({
+    required this.image,
+  }) {
+    id = DateTime.now().millisecondsSinceEpoch.toString();
+  }
+}
+
 class DataLocationScreen extends StatefulWidget {
   const DataLocationScreen({super.key});
 
@@ -38,7 +49,7 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
   final TextEditingController _messageController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
   final List<PDFModel> _pdfName = [];
-  XFile? _imageFile;
+  final List<ImageModel> _imageFiles = [];
 
   void _showConfirmationDialog() {
     showDialog(
@@ -148,22 +159,26 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
     return file.files.single;
   }
 
-  Future<void> _openGallery() async {
+  Future<void> _selectImage(ImageSource source) async {
     final imagePicker = ImagePicker();
-    final XFile? image =
-        await imagePicker.pickImage(source: ImageSource.gallery);
+    final XFile? image = await imagePicker.pickImage(source: source);
+
+    if (image == null) {
+      return;
+    }
+
     setState(() {
-      _imageFile = image;
+      _imageFiles.add(ImageModel(image: File(image.path)));
     });
   }
 
-  Future<void> _deleteImage() async {
+  Future<void> _deleteImage(String id) async {
     _showDialogConfirmation(
       title: 'Excluir imagem',
       message: 'Deseja realmente excluir a imagem?',
       onConfirm: () {
         setState(() {
-          _imageFile = null;
+          _imageFiles.removeWhere((element) => element.id == id);
         });
         Navigator.of(context).pop();
       },
@@ -181,15 +196,6 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
         Navigator.of(context).pop();
       },
     );
-  }
-
-  Future<void> _openCamera() async {
-    final imagePicker = ImagePicker();
-    final XFile? image =
-        await imagePicker.pickImage(source: ImageSource.camera);
-    setState(() {
-      _imageFile = image;
-    });
   }
 
   void _showDialogConfirmation({
@@ -366,17 +372,9 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                       ),
                     ),
                     16.width,
-                    // Text(
-                    //   _pdfName ?? "",
-                    //   style: const TextStyle(
-                    //     fontSize: 12,
-                    //     fontWeight: FontWeight.bold,
-                    //   ),
-                    // ),
-                    // 16.width,
                     IconButton(
                       onPressed: () async {
-                        await _openGallery();
+                        await _selectImage(ImageSource.gallery);
                       },
                       icon: const Icon(
                         Icons.collections,
@@ -387,7 +385,7 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                     16.width,
                     IconButton(
                       onPressed: () async {
-                        await _openCamera();
+                        await _selectImage(ImageSource.camera);
                       },
                       icon: const Icon(
                         Icons.photo_camera,
@@ -420,6 +418,7 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                                   const Icon(
                                     Icons.attach_file,
                                     color: appColorPrimary,
+                                    size: 16,
                                   ),
                                   Text(
                                     _pdfName[index].name,
@@ -436,6 +435,7 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                                     child: const Icon(
                                       Icons.close,
                                       color: Colors.red,
+                                      size: 16,
                                     ),
                                   ),
                                 ],
@@ -445,35 +445,73 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                         ],
                       )
                     : Container(),
-                Row(
-                  children: [
-                    _imageFile != null
-                        ? Stack(
-                            children: [
-                              Image.file(
-                                File(_imageFile!.path),
-                                height: 50,
-                                width: 50,
-                                fit: BoxFit.cover,
+                16.height,
+                _imageFiles.isNotEmpty
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                            Text(
+                              'Imagens anexadas:',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
                               ),
-                              Positioned(
-                                top: 0,
-                                right: 0,
-                                child: GestureDetector(
-                                  onTap: () async {
-                                    await _deleteImage();
-                                  },
-                                  child: const Icon(
-                                    Icons.close,
-                                    color: Colors.red,
-                                  ),
+                            ),
+                          ])
+                    : Container(),
+                _imageFiles.isNotEmpty
+                    ? SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: List.generate(
+                            _imageFiles.length,
+                            (index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(right: 8),
+                                      width: 50,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        image: DecorationImage(
+                                          image: FileImage(
+                                              _imageFiles[index].image),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 0,
+                                      right: 0,
+                                      child: GestureDetector(
+                                        onTap: () async {
+                                          await _deleteImage(
+                                              _imageFiles[index].id);
+                                        },
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                            color: Colors.red,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                            size: 16,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          )
-                        : Container(),
-                  ],
-                ),
+                              );
+                            },
+                          ),
+                        ),
+                      )
+                    : Container(),
                 32.height,
                 ElevatedButton(
                   onPressed: () {
