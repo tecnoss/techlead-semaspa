@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:semasma/screens/denuncia_ouvidoria/repository/report_provider.dart';
 import 'package:semasma/utils/app_colors.dart';
 import 'package:semasma/widgets/bottom_bar.dart';
+import 'package:semasma/widgets/custom_button.dart';
 import 'package:semasma/widgets/screen_title.dart';
 import 'package:semasma/widgets/title_app_bar.dart';
 
@@ -81,7 +82,9 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                     );
                   }
 
-                  if (reportProvider.trySend && !reportProvider.success) {
+                  if (reportProvider.trySend &&
+                      !reportProvider.success &&
+                      !reportProvider.sending) {
                     return const Icon(
                       Icons.error,
                       size: 64,
@@ -124,13 +127,30 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                 child: Consumer<ReportProvider>(
                   builder: (context, reportProvider, child) {
                     bool isLoading = reportProvider.isLoading;
+                    bool isError = reportProvider.isError;
                     return ElevatedButton(
                       onPressed: isLoading
                           ? null
                           : () => {
-                                Navigator.of(context).pop(),
-                                Navigator.of(context).pushNamedAndRemoveUntil(
-                                    "/home", (route) => false),
+                                if (isError)
+                                  {
+                                    Navigator.of(context).pop(),
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          'Ocorreu um erro ao enviar sua denúncia, tente novamente mais tarde.',
+                                        ),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    ),
+                                  }
+                                else
+                                  {
+                                    Navigator.of(context).pop(),
+                                    Navigator.of(context)
+                                        .pushNamedAndRemoveUntil(
+                                            "/home", (route) => false),
+                                  }
                               },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -242,6 +262,34 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
     );
   }
 
+  void _showAlertLimitDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Anexos muito grandes'),
+          content: const Text(
+              'Os anexos ultrapassaram 20MB. Remova alguns anexos para enviar o email.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<bool> _checkConnection() async {
+    ConnectivityResult isConnected = await Connectivity().checkConnectivity();
+
+    if (isConnected == ConnectivityResult.none) {
+      return false;
+    }
+    return true;
+  }
+
   void _showDialogConfirmation({
     required String title,
     required String message,
@@ -268,20 +316,53 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
     );
   }
 
-  void _showAlertLimitDialog() {
+  @override
+  void initState() {
+    Connectivity().checkConnectivity().then((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Você está sem conexão com a internet.',
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    });
+    super.initState();
+  }
+
+  void showConfirmationDialogOffline() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Anexos muito grandes'),
-          content: const Text(
-              'Os anexos ultrapassaram 20MB. Remova alguns anexos para enviar o email.'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('OK'),
-            ),
-          ],
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Icon(
+                Icons.warning,
+                color: Colors.orange,
+                size: 40,
+              ),
+              const Text(
+                'Seu dispositivo está offline! Guardaremos sua denúncia para que você possa enviá-la assim que estiver online.',
+              ),
+              16.height,
+              CustomButton(
+                onPressed: () {
+                  context.read<ReportProvider>().saveOnLocalStorage();
+
+                  Navigator.of(context).pop();
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil("/home", (route) => false);
+                },
+                text: "OK",
+              )
+            ],
+          ),
         );
       },
     );
@@ -573,7 +654,7 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                     : Container(),
                 32.height,
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       if (totalSize > limitSize) {
                         _showAlertLimitDialog();
@@ -593,6 +674,11 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                       context.read<ReportProvider>().date =
                           _dateController.text;
                       context.read<ReportProvider>().setFiles(fileToSend);
+
+                      if (!await _checkConnection()) {
+                        showConfirmationDialogOffline();
+                        return;
+                      }
 
                       context
                           .read<ReportProvider>()

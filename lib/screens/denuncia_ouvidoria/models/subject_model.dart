@@ -9,6 +9,11 @@ class Subject {
     required this.competencia,
   });
 
+  Subject.fromJson(Map<String, dynamic> json)
+      : escopo = json['escopo'],
+        name = json['name'],
+        competencia = json['competencia'];
+
   @override
   String toString() {
     return '''
@@ -19,4 +24,10 @@ class Subject {
       }
     ''';
   }
+
+  Map toJson() => {
+        'escopo': escopo,
+        'name': name,
+        'competencia': competencia,
+      };
 }
