@@ -81,7 +81,9 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                     );
                   }
 
-                  if (reportProvider.trySend && !reportProvider.success) {
+                  if (reportProvider.trySend &&
+                      !reportProvider.success &&
+                      !reportProvider.sending) {
                     return const Icon(
                       Icons.error,
                       size: 64,
@@ -124,13 +126,30 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                 child: Consumer<ReportProvider>(
                   builder: (context, reportProvider, child) {
                     bool isLoading = reportProvider.isLoading;
+                    bool isError = reportProvider.isError;
                     return ElevatedButton(
                       onPressed: isLoading
                           ? null
                           : () => {
-                                Navigator.of(context).pop(),
-                                Navigator.of(context).pushNamedAndRemoveUntil(
-                                    "/home", (route) => false),
+                                if (isError)
+                                  {
+                                    Navigator.of(context).pop(),
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          'Ocorreu um erro ao enviar sua denúncia, tente novamente mais tarde.',
+                                        ),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    ),
+                                  }
+                                else
+                                  {
+                                    Navigator.of(context).pop(),
+                                    // Navigator.of(context)
+                                    //     .pushNamedAndRemoveUntil(
+                                    //         "/home", (route) => false),
+                                  }
                               },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -285,6 +304,50 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
         );
       },
     );
+  }
+
+  bool _checkConnection() {
+    if (ConnectivityResult.none == ConnectivityResult.none) {
+      _showDialogConfirmation(
+        title: 'Sem conexão',
+        message: 'Você está sem conexão com a internet.',
+        onConfirm: () {
+          Navigator.of(context).pop();
+        },
+      );
+      return false;
+    }
+
+    return true;
+  }
+
+  @override
+  void initState() {
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        _showDialogConfirmation(
+          title: 'Sem conexão',
+          message: 'Você está sem conexão com a internet.',
+          onConfirm: () {
+            Navigator.of(context).pop();
+          },
+        );
+      }
+    });
+
+    Connectivity().checkConnectivity().then((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Você está sem conexão com a internet.',
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    });
+    super.initState();
   }
 
   @override
@@ -593,6 +656,11 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                       context.read<ReportProvider>().date =
                           _dateController.text;
                       context.read<ReportProvider>().setFiles(fileToSend);
+
+                      if (!_checkConnection()) {
+                        context.read<ReportProvider>().saveOnLocalStorage();
+                        return;
+                      }
 
                       context
                           .read<ReportProvider>()

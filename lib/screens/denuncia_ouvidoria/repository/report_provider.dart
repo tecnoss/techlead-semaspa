@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:semasma/screens/denuncia_ouvidoria/models/subject_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ReportProvider extends ChangeNotifier {
   Subject? subject;
@@ -37,6 +40,20 @@ class ReportProvider extends ChangeNotifier {
   bool get trySend => _trySend;
   set trySend(bool value) {
     _trySend = value;
+    notifyListeners();
+  }
+
+  bool _isError = false;
+  bool get isError => _isError;
+  set isError(bool value) {
+    _isError = value;
+    notifyListeners();
+  }
+
+  bool _sending = false;
+  bool get sending => _sending;
+  set sending(bool value) {
+    _sending = value;
     notifyListeners();
   }
 
@@ -86,7 +103,7 @@ class ReportProvider extends ChangeNotifier {
   }
 
   Future<void> sendEmail() async {
-    String to = "joao.costa@techlead.com.br";
+    String to = "thiago.nascimento@techlead.com.br";
     String subject =
         "Denúncia de ${this.subject!.escopo} - ${this.subject!.name}";
     String format = "Html";
@@ -104,6 +121,8 @@ class ReportProvider extends ChangeNotifier {
     try {
       trySend = true;
       isLoading = true;
+      isError = false;
+      sending = true;
 
       request.fields['to'] = to;
       request.fields['subject'] = subject;
@@ -114,11 +133,52 @@ class ReportProvider extends ChangeNotifier {
       debugPrint("Enviado com sucesso!");
       success = true;
       isLoading = false;
-      _resetFields();
+      sending = false;
+      // _resetFields();
     } catch (e) {
       debugPrint(e.toString());
       success = false;
       isLoading = false;
+      isError = true;
+      sending = false;
+    }
+  }
+
+  Future<void> saveOnLocalStorage() async {
+    try {
+      isLoading = true;
+      isError = false;
+      sending = true;
+
+      String myClassJson = jsonEncode({
+        "subject": subject,
+        "identification": identification,
+        "email": email,
+        "tipoLocalizacao": tipoLocalizacao,
+        "lat": lat,
+        "lng": lng,
+        "municipio": municipio,
+        "endereco": endereco,
+        "numero": numero,
+        "bairro": bairro,
+        "pontoReferencia": pontoReferencia,
+        "ncar": ncar,
+        "date": date,
+        "message": message,
+        "files": files!.map((e) => e.toString()).toList(),
+      });
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('denuncia', myClassJson);
+
+      isLoading = false;
+      sending = false;
+      _resetFields();
+    } catch (e) {
+      debugPrint(e.toString());
+      isLoading = false;
+      isError = true;
+      sending = false;
     }
   }
 
@@ -184,4 +244,22 @@ class ReportProvider extends ChangeNotifier {
       message: $message,
     }
   ''';
+
+  Map toJson() => {
+        'subject': subject,
+        'identification': identification,
+        'email': email,
+        'tipoLocalizacao': tipoLocalizacao,
+        'lat': lat,
+        'lng': lng,
+        'municipio': municipio,
+        'endereco': endereco,
+        'numero': numero,
+        'bairro': bairro,
+        'pontoReferencia': pontoReferencia,
+        'ncar': ncar,
+        'date': date,
+        'message': message,
+        'files': files!.map((e) => e.toString()).toList(),
+      };
 }
