@@ -57,6 +57,20 @@ class ReportProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool _sendingOffline = false;
+  bool get sendingOffline => _sendingOffline;
+  set sendingOffline(bool value) {
+    _sendingOffline = value;
+    notifyListeners();
+  }
+
+  bool _errorOffline = false;
+  bool get errorOffline => _errorOffline;
+  set errorOffline(bool value) {
+    _errorOffline = value;
+    notifyListeners();
+  }
+
   final String url =
       "http://appmobile-integracao.semas.pa.gov.br:8443/api/mail/send";
 
@@ -134,7 +148,7 @@ class ReportProvider extends ChangeNotifier {
       success = true;
       isLoading = false;
       sending = false;
-      // _resetFields();
+      _resetFields();
     } catch (e) {
       debugPrint(e.toString());
       success = false;
@@ -151,7 +165,7 @@ class ReportProvider extends ChangeNotifier {
       sending = true;
 
       String myClassJson = jsonEncode({
-        "subject": subject,
+        "subject": subject!.toJson(),
         "identification": identification,
         "email": email,
         "tipoLocalizacao": tipoLocalizacao,
@@ -169,16 +183,84 @@ class ReportProvider extends ChangeNotifier {
       });
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('denuncia', myClassJson);
+      List<String> reports = [];
+      reports.add(myClassJson);
+      List<String>? getReports = prefs.getStringList('reports');
+
+      if (getReports != null) {
+        reports.addAll(getReports);
+      }
+
+      Set<String> setReport = <String>{};
+
+      for (var item in reports) {
+        setReport.add(item);
+      }
+
+      await prefs.setStringList('reports', reports.toList());
 
       isLoading = false;
       sending = false;
+
       _resetFields();
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("Erro aqui: $e");
       isLoading = false;
       isError = true;
       sending = false;
+    }
+  }
+
+  Future<bool>? isAnyOfflineReport() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    List<String>? getReports = prefs.getStringList('reports');
+    if (getReports != null) {
+      debugPrint("Tem relatório offline: $getReports");
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<void> sendOfflineReports() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    sendingOffline = true;
+    errorOffline = false;
+
+    List<String>? getReports = prefs.getStringList('reports');
+    if (getReports != null) {
+      for (var item in getReports) {
+        Map<String, dynamic> report = jsonDecode(item);
+
+        subject = Subject.fromJson(report['subject']);
+        identification = report['identification'];
+        email = report['email'];
+        tipoLocalizacao = report['tipoLocalizacao'];
+        lat = report['lat'];
+        lng = report['lng'];
+        municipio = report['municipio'];
+        endereco = report['endereco'];
+        numero = report['numero'];
+        bairro = report['bairro'];
+        pontoReferencia = report['pontoReferencia'];
+        ncar = report['ncar'];
+        date = report['date'];
+        message = report['message'];
+        files = report['files'].cast<String>();
+
+        try {
+          await sendEmail();
+        } catch (e) {
+          errorOffline = true;
+          debugPrint("Erro ao enviar relatório offline: $e");
+        }
+      }
+    }
+
+    sendingOffline = false;
+    if (!errorOffline) {
+      await prefs.remove('reports');
     }
   }
 

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:provider/provider.dart';
+import 'package:semasma/screens/denuncia_ouvidoria/repository/report_provider.dart';
 import 'package:semasma/widgets/bottom_bar.dart';
+import 'package:semasma/widgets/custom_button.dart';
 import 'package:semasma/widgets/leading.dart';
 import 'package:semasma/widgets/screen_title.dart';
 import 'package:semasma/widgets/title_app_bar.dart';
@@ -16,6 +19,199 @@ class DenunciaOuvidoriaScreen extends StatefulWidget {
 }
 
 class _DenunciaOuvidoriaScreenState extends State<DenunciaOuvidoriaScreen> {
+  Future<void> checkOfflineReports() async {
+    bool? isAnyReport =
+        await context.read<ReportProvider>().isAnyOfflineReport();
+
+    if (isAnyReport == null || isAnyReport == false) {
+      debugPrint('Não nenhuma denúncia offline');
+    } else {
+      _showOfflineReportsDialog();
+      debugPrint('Existe denúncia offline');
+    }
+  }
+
+  _showDialogOffline() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.warning,
+              color: Colors.orange,
+              size: 40,
+            ),
+            16.height,
+            const Text(
+              'Você está sem conexão com a internet. Por favor, tente novamente mais tarde.',
+              textAlign: TextAlign.center,
+            ),
+            16.height,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CustomButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  text: 'Ok',
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showOfflineReportsDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Icon(
+              Icons.warning,
+              color: Colors.orange,
+              size: 40,
+            ),
+            16.height,
+            const Text(
+              'Você possui denúncia(s) não enviada(s)! Deseja enviá-la(s) agora ou mais tarde?',
+              textAlign: TextAlign.center,
+            ),
+            16.height,
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    if (!await _checkConnection()) {
+                      _showDialogOffline();
+                      return;
+                    }
+                    if (context.mounted) {
+                      context.read<ReportProvider>().sendOfflineReports();
+                      Navigator.pop(context);
+                      _showDialogStatus();
+                    }
+                  },
+                  child: const Text('Enviar já'),
+                ),
+                const Spacer(),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey,
+                    ),
+                    child: const Text(
+                      'Enviar mais\n tarde',
+                      textAlign: TextAlign.center,
+                    )),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showDialogStatus() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Consumer<ReportProvider>(
+          builder: (context, reportProvider, child) {
+            bool isError = reportProvider.errorOffline;
+            bool isSending = reportProvider.sendingOffline;
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (isError) ...[
+                  const Icon(
+                    Icons.error,
+                    color: Colors.red,
+                    size: 40,
+                  ),
+                  16.height,
+                  const Text(
+                    'Ocorreu um erro ao enviar a(s) denúncia(s). Por favor, tente novamente mais tarde.',
+                    textAlign: TextAlign.center,
+                  ),
+                  16.height,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        text: 'Ok',
+                      ),
+                    ],
+                  )
+                ] else if (isSending) ...[
+                  const SizedBox(
+                    height: 40,
+                    width: 40,
+                    child: CircularProgressIndicator(),
+                  ),
+                  16.height,
+                  const Text(
+                    'Enviando denúncia(s)...',
+                    textAlign: TextAlign.center,
+                  ),
+                ] else ...[
+                  const Icon(
+                    Icons.check_circle,
+                    color: Colors.green,
+                    size: 40,
+                  ),
+                  16.height,
+                  const Text(
+                    'Denúncia(s) enviada(s) com sucesso!',
+                    textAlign: TextAlign.center,
+                  ),
+                  16.height,
+                  CustomButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    text: 'Ok',
+                  )
+                ],
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Future<bool> _checkConnection() async {
+    ConnectivityResult isConnected = await Connectivity().checkConnectivity();
+
+    if (isConnected == ConnectivityResult.none) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  void initState() {
+    checkOfflineReports();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
