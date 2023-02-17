@@ -434,18 +434,36 @@ class _LocationDenunciaScreenState extends State<LocationDenunciaScreen> {
                   ),
                 ),
                 16.height,
-                const Text(
-                  'Número:',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
+                RichText(
+                  text: const TextSpan(
+                    text: 'Número:',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: '*',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.red,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 4.height,
                 SizedBox(
                   // height: 40,
-                  child: TextField(
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Campo obrigatório';
+                      }
+                      return null;
+                    },
                     controller: _numController,
                     style: const TextStyle(
                       color: Colors.black,
