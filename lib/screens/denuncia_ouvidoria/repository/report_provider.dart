@@ -116,6 +116,23 @@ class ReportProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setAddress({
+    required String municipio,
+    required String endereco,
+    required String numero,
+    required String bairro,
+    required String lat,
+    required String lng,
+  }) {
+    this.municipio = municipio;
+    this.endereco = endereco;
+    this.numero = numero;
+    this.bairro = bairro;
+    this.lat = lat;
+    this.lng = lng;
+    notifyListeners();
+  }
+
   Future<void> sendEmail() async {
     String to = "thiago.nascimento@techlead.com.br";
     String subject =
