@@ -59,6 +59,8 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
   final List<ImageModel> _imageFiles = [];
   final int limitSize = 20971000;
   int totalSize = 0;
+  bool _isDateEmpty = true;
+  bool? _errorDate;
 
   void _showConfirmationDialog() {
     showDialog(
@@ -440,6 +442,8 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                           String formatDate =
                               '${picked.toString().substring(8, 10)}/${picked.toString().substring(5, 7)}/${picked.toString().substring(0, 4)}';
                           setState(() {
+                            _isDateEmpty = false;
+                            _errorDate = false;
                             _dateController.text = formatDate;
                           });
                         }
@@ -447,6 +451,15 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                     ),
                   ],
                 ),
+                _errorDate == true
+                    ? Text(
+                        'Campo obrigatório',
+                        style: TextStyle(
+                          color: Colors.red.shade900,
+                          fontSize: 12,
+                        ),
+                      )
+                    : Container(),
                 16.height,
                 const Text(
                   'Mensagem do ocorrido:',
@@ -655,7 +668,16 @@ class _DataLocationScreenState extends State<DataLocationScreen> {
                 32.height,
                 ElevatedButton(
                   onPressed: () async {
+                    if (_isDateEmpty) {
+                      setState(() {
+                        _errorDate = true;
+                      });
+                    }
                     if (_formKey.currentState!.validate()) {
+                      if (_errorDate == true) {
+                        return;
+                      }
+
                       if (totalSize > limitSize) {
                         _showAlertLimitDialog();
                         return;
