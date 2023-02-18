@@ -1,5 +1,9 @@
-Future<String> convertCoord(double value) async {
+String convertCoord(double value) {
   final coord = value;
+
+  if (coord == 0) {
+    return '';
+  }
 
   // Converta a latitude e longitude em graus, minutos e segundos
   final coordDegrees = coord.floor();

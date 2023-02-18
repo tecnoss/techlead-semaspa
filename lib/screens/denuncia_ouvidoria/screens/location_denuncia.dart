@@ -24,7 +24,6 @@ class LocationDenunciaScreen extends StatefulWidget {
 
 class _LocationDenunciaScreenState extends State<LocationDenunciaScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _isLoading = false;
 
   List<RadioModel> sampleData = <RadioModel>[
     RadioModel(true, 'Urbano'),
@@ -42,32 +41,18 @@ class _LocationDenunciaScreenState extends State<LocationDenunciaScreen> {
   final TextEditingController _bairroController = TextEditingController();
   final TextEditingController _refController = TextEditingController();
   final TextEditingController _carController = TextEditingController();
+  double? _lat;
+  double? _long;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _determinePosition().then((value) {
-        _latController.text = value.latitude.toString();
-        _longController.text = value.longitude.toString();
-        setState(() {
-          _isLoading = false;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Localização obtida com sucesso!'),
-          ),
-        );
+        _lat = value.latitude;
+        _long = value.longitude;
       }).onError((error, stackTrace) {
-        setState(() {
-          _isLoading = false;
-        });
         debugPrint(error.toString());
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Tente selecionar sua localização manualmente!'),
-          ),
-        );
       });
     });
   }
@@ -104,11 +89,6 @@ class _LocationDenunciaScreenState extends State<LocationDenunciaScreen> {
           'Location permissions are permanently denied, we cannot request permissions.');
     }
 
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
-    setState(() {
-      _isLoading = true;
-    });
     return await Geolocator.getCurrentPosition();
   }
 
@@ -116,6 +96,28 @@ class _LocationDenunciaScreenState extends State<LocationDenunciaScreen> {
   Widget build(BuildContext context) {
     List<Municipio> municipios =
         context.read<MunicipioProvider>().getMunicipios();
+
+    String? lat = context.watch<ReportProvider>().lat;
+    String? long = context.watch<ReportProvider>().lng;
+    String? end = context.watch<ReportProvider>().endereco;
+    String? num = context.watch<ReportProvider>().numero;
+    String? bairro = context.watch<ReportProvider>().bairro;
+    String? city = context.watch<ReportProvider>().municipio;
+
+    _latController.text = lat ?? '';
+    _longController.text = long ?? '';
+    _endController.text = end ?? '';
+    _numController.text = num ?? '';
+    _bairroController.text = bairro ?? '';
+
+    if (city != null) {
+      setState(() {
+        dropdownValue = city;
+        _selectedCity =
+            municipios.firstWhere((element) => element.name == city);
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const TitleAppBar(
@@ -190,12 +192,8 @@ class _LocationDenunciaScreenState extends State<LocationDenunciaScreen> {
                     onPressed: () async {
                       final LatLng? result = await Navigator.of(context)
                           .pushNamed("/denuncia_ouvidoria/map", arguments: {
-                        'lat': _latController.text.isNotEmpty
-                            ? double.tryParse(_latController.text)
-                            : -1.3833703,
-                        'long': _longController.text.isNotEmpty
-                            ? double.tryParse(_longController.text)
-                            : -48.4795403,
+                        'lat': _lat ?? -1.3833703,
+                        'long': _long ?? -48.4795403,
                       }) as LatLng?;
 
                       if (result == null) {
@@ -219,21 +217,6 @@ class _LocationDenunciaScreenState extends State<LocationDenunciaScreen> {
                   ),
                 ),
                 16.height,
-                _isLoading
-                    ? Column(
-                        children: const [
-                          Center(child: CircularProgressIndicator()),
-                          Text(
-                            'Buscando sua localização...',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      )
-                    : 0.height,
                 const Text(
                   'Latitude:',
                   style: TextStyle(
@@ -333,6 +316,7 @@ class _LocationDenunciaScreenState extends State<LocationDenunciaScreen> {
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Colors.white,
+                      width: 0,
                     ),
                     borderRadius: BorderRadius.circular(4),
                     color: Colors.white,
@@ -358,6 +342,9 @@ class _LocationDenunciaScreenState extends State<LocationDenunciaScreen> {
                     iconSize: 24,
                     elevation: 16,
                     style: const TextStyle(color: Colors.black),
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                    ),
                     onChanged: (String? newValue) {
                       if (newValue == null) return;
 

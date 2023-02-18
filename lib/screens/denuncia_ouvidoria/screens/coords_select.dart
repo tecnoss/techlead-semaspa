@@ -11,6 +11,7 @@ import 'package:semasma/utils/app_colors.dart';
 import 'package:semasma/widgets/custom_button.dart';
 import 'package:semasma/widgets/title_app_bar.dart';
 
+import '../models/address_model.dart';
 import '../utils/convert_coord.dart';
 
 class MapScreen extends StatefulWidget {
@@ -19,18 +20,6 @@ class MapScreen extends StatefulWidget {
 
   @override
   State<MapScreen> createState() => MapScreenState();
-}
-
-class Address {
-  final String? lat;
-  final String? lng;
-  final String? street;
-  final String? city;
-  final String? distrit;
-  final String? number;
-
-  Address(
-      {this.lat, this.lng, this.street, this.city, this.distrit, this.number});
 }
 
 class MapScreenState extends State<MapScreen> {
@@ -63,12 +52,12 @@ class MapScreenState extends State<MapScreen> {
                 children: [
                   _field(
                     label: "Latitude",
-                    value: _address?.lat ?? "",
+                    value: convertCoord(_address?.lat ?? 0),
                   ),
                   8.height,
                   _field(
                     label: "Longitude",
-                    value: _address?.lng ?? "",
+                    value: convertCoord(_address?.lng ?? 0),
                   ),
                   8.height,
                   _field(
@@ -98,8 +87,8 @@ class MapScreenState extends State<MapScreen> {
                             numero: _address?.number ?? "",
                             bairro: _address?.distrit ?? "",
                             municipio: _address?.city ?? "",
-                            lat: _address?.lat ?? "",
-                            lng: _address?.lng ?? "",
+                            lat: convertCoord(_address?.lat ?? 0),
+                            lng: convertCoord(_address?.lng ?? 0),
                           );
 
                       Navigator.of(context).pop();
@@ -174,13 +163,11 @@ class MapScreenState extends State<MapScreen> {
       List<Placemark> placemarks = await placemarkFromCoordinates(
           _center.value.latitude, _center.value.longitude);
       Placemark place = placemarks[0];
-      String latString = await convertCoord(_center.value.latitude);
-      String longString = await convertCoord(_center.value.longitude);
 
       setState(() {
         _address = Address(
-          lat: latString,
-          lng: longString,
+          lat: _center.value.latitude,
+          lng: _center.value.longitude,
           street: place.street,
           city: place.subAdministrativeArea,
           distrit: place.subLocality,
@@ -240,7 +227,7 @@ class MapScreenState extends State<MapScreen> {
                   markers: <Marker>{
                     Marker(
                       markerId: const MarkerId("marker_1"),
-                      position: _center.value ?? LatLng(lat, long),
+                      position: _center.value,
                     ),
                   },
                 ),
