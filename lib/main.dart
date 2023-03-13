@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
+import 'package:semasma/screens/about_semas/about_semas_screen.dart';
 import 'package:semasma/screens/app_splash_screen.dart';
 import 'package:semasma/screens/denuncia_ouvidoria/repository/municipio_provider.dart';
 import 'package:semasma/screens/denuncia_ouvidoria/repository/report_provider.dart';
@@ -69,6 +70,10 @@ class MyApp extends StatelessWidget {
             case '/home':
               return MaterialPageRoute(
                 builder: (context) => const HomeScreen(),
+              );
+            case '/about_semas':
+              return MaterialPageRoute(
+                builder: (context) => const AboutSemasScreen(),
               );
             case '/previsao_tempo':
               return MaterialPageRoute(

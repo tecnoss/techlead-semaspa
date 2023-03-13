@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
       "id": "conheca-semas",
       "icon": "assets/icons/home/semas.png",
       "title": "Conheça a SEMAS",
-      "route": "/conheca_semas",
+      "route": "/about_semas",
     },
     // {
     //   "icon": "assets/icons/home/previsao_tempo.png",
@@ -114,10 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
-                    if (_itens[index]["id"] == "conheca-semas") {
-                      _launchURL(
-                          "https://www.semas.pa.gov.br/institucional/o-que-e-a-sema/");
-                    } else if (_itens[index]["id"] == "processo-simlam") {
+                    if (_itens[index]["id"] == "processo-simlam") {
                       _launchURL(
                           "https://monitoramento.semas.pa.gov.br/simlam/index.htm");
                     } else if (_itens[index]["id"] == "portal-transparencia") {
