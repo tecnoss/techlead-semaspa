@@ -43,15 +43,15 @@ class WeatherToday extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
-                        children: const [
+                        children: [
                           Text(
-                            "30°C",
-                            style: TextStyle(
+                            "${weather.maxima}°C",
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text(
+                          const Text(
                             "Máxima",
                             style: TextStyle(
                               fontSize: 12,
@@ -61,15 +61,15 @@ class WeatherToday extends StatelessWidget {
                         ],
                       ),
                       Column(
-                        children: const [
+                        children: [
                           Text(
-                            "24°C",
-                            style: TextStyle(
+                            "${weather.minima}°C",
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text(
+                          const Text(
                             "Mínima",
                             style: TextStyle(
                               fontSize: 12,
@@ -98,25 +98,25 @@ class WeatherToday extends StatelessWidget {
                       24.width,
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Icon(
+                        children: [
+                          const Icon(
                             Icons.expand_less,
                             size: 16,
                           ),
                           Text(
-                            "98%",
-                            style: TextStyle(
+                            "${weather.umidadeRelativaMaxima}%",
+                            style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Icon(
+                          const Icon(
                             Icons.expand_more,
                             size: 16,
                           ),
                           Text(
-                            "55%",
-                            style: TextStyle(
+                            "${weather.umidadeRelativaMinima}%",
+                            style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
@@ -150,7 +150,11 @@ class WeatherToday extends StatelessWidget {
                         "assets/icons/previsao_tempo/less_cloud.png",
                         height: 64,
                       ),
-                      const Text("Poucas nuvens."),
+                      Text(
+                        weather.previsaoManha,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 4,
+                      ),
                     ],
                   ),
                 ],

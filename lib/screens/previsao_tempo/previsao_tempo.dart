@@ -218,14 +218,45 @@ class _PrevisaoTempoState extends State<PrevisaoTempo> {
                 ),
                 const Divider(
                   color: appColorPrimary,
-                  thickness: 2,
+                  thickness: 1,
                 ),
                 8.height,
                 weatherToday != null
                     ? WeatherToday(weather: weatherToday!)
-                    : Container(),
+                    : const Text(
+                        "Não foi possível carregar os dados para hoje",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.black54,
+                        ),
+                      ),
               ],
               16.height,
+              const Text(
+                "Histórico de previsões",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: appColorPrimary,
+                ),
+              ),
+              const Divider(
+                color: appColorPrimary,
+                thickness: 1,
+              ),
+              8.height,
+              if (pastWeathers.isNotEmpty)
+                Column(
+                  children: const [],
+                )
+              else
+                const Text(
+                  "Não foi possível carregar o histórico",
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.black54,
+                  ),
+                ),
             ],
           ),
         ),
