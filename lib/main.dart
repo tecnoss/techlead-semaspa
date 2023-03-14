@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:semasma/screens/about_semas/about_semas_screen.dart';
@@ -31,6 +32,8 @@ import 'utils/app_constant.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initialize();
+  await initializeDateFormatting('pt_BR', null);
+
   runApp(const MyApp());
 }
 
@@ -57,6 +60,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        locale: const Locale('pt', 'BR'),
         debugShowCheckedModeBanner: false,
         title: '$appName${!isMobile ? ' ${platformName()}' : ''}',
         theme: AppThemeData.lightTheme,

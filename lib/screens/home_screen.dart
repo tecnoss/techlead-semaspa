@@ -20,11 +20,12 @@ class _HomeScreenState extends State<HomeScreen> {
       "title": "Conheça a SEMAS",
       "route": "/about_semas",
     },
-    // {
-    //   "icon": "assets/icons/home/previsao_tempo.png",
-    //   "title": "Previsão do Tempo",
-    //   "route": "/previsao_tempo",
-    // },
+    {
+      "id": "previsao-tempo",
+      "icon": "assets/icons/home/previsao_tempo.png",
+      "title": "Previsão do Tempo",
+      "route": "/previsao_tempo",
+    },
     {
       "id": "redes-sociais",
       "icon": "assets/icons/home/redes_sociais.png",

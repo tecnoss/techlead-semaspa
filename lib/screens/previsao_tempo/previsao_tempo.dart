@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:semasma/screens/previsao_tempo/card_data.dart';
+import 'package:semasma/screens/previsao_tempo/model/city_data_model.dart';
 import 'package:semasma/utils/app_colors.dart';
 import 'package:semasma/widgets/leading.dart';
 import 'package:semasma/widgets/title_app_bar.dart';
 
 import '../../widgets/bottom_bar.dart';
-import '../../widgets/screen_title.dart';
 
 class PrevisaoTempo extends StatefulWidget {
   const PrevisaoTempo({Key? key}) : super(key: key);
@@ -16,11 +17,43 @@ class PrevisaoTempo extends StatefulWidget {
 }
 
 class _PrevisaoTempoState extends State<PrevisaoTempo> {
+  List<CityData> cityData = [
+    CityData(id: 1, regiao: "Região Metropolitana de Belém", label: "Belém"),
+    CityData(id: 5, regiao: "Marabá", label: "Marabá"),
+    CityData(id: 7, regiao: "Altamira", label: "Altamira"),
+    CityData(id: 8, regiao: "Santarém", label: "Santarém"),
+  ];
+
+  String? formattedDate;
+
+  CityData? selectedCity;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedCity = cityData[0];
+    getDate();
+  }
+
+  void getDate() async {
+    // await initializeDateFormatting('pt_BR', '');
+    DateTime now = DateTime.now();
+
+    setState(
+      () => {
+        formattedDate =
+            DateFormat('EEEE, dd \'de\' MMMM \'de\' y', 'pt_BR').format(now),
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const TitleAppBar(),
+        title: const TitleAppBar(
+          title: "Previsão do Tempo",
+        ),
         centerTitle: true,
         leading: const Leading(),
       ),
@@ -31,17 +64,17 @@ class _PrevisaoTempoState extends State<PrevisaoTempo> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const ScreenTitle(title: 'Previsão do Tempo'),
-              Row(
+              16.height,
+              Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Expanded(
-                    flex: 2,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
                             Icon(
                               Icons.location_on,
@@ -59,20 +92,19 @@ class _PrevisaoTempoState extends State<PrevisaoTempo> {
                             ),
                           ],
                         ),
-                        const Text(
-                          "Sexta, 21 de Outubro de 2022",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.black54,
-                          ),
+                      ),
+                      Text(
+                        formattedDate ?? "",
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.black54,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(
-                    width: 16,
-                  ),
+                  16.height,
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Text(
                         "Outras Cidades do Pará",
@@ -94,7 +126,12 @@ class _PrevisaoTempoState extends State<PrevisaoTempo> {
                           color: Colors.white,
                         ),
                         child: DropdownButton(
-                          onChanged: ((value) {}),
+                          value: selectedCity,
+                          onChanged: ((value) {
+                            setState(() {
+                              selectedCity = value;
+                            });
+                          }),
                           underline: Container(),
                           hint: const Text(
                             "Selecione",
@@ -103,20 +140,18 @@ class _PrevisaoTempoState extends State<PrevisaoTempo> {
                               color: Colors.black54,
                             ),
                           ),
-                          items: const [
-                            DropdownMenuItem(
-                              value: "belem",
-                              child: Text("Belém"),
-                            ),
-                            DropdownMenuItem(
-                              value: "ananindeua",
-                              child: Text("Ananindeua"),
-                            ),
-                            DropdownMenuItem(
-                              value: "marituba",
-                              child: Text("Marituba"),
-                            ),
-                          ],
+                          items: cityData.map((CityData city) {
+                            return DropdownMenuItem<CityData>(
+                              value: city,
+                              child: Text(
+                                city.regiao,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black54,
+                                ),
+                              ),
+                            );
+                          }).toList(),
                         ),
                       ),
                     ],
