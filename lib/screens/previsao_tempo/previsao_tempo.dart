@@ -230,37 +230,123 @@ class _PrevisaoTempoState extends State<PrevisaoTempo> {
                           color: Colors.black54,
                         ),
                       ),
-              ],
-              16.height,
-              const Text(
-                "Histórico de previsões",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: appColorPrimary,
-                ),
-              ),
-              const Divider(
-                color: appColorPrimary,
-                thickness: 1,
-              ),
-              8.height,
-              if (pastWeathers.isNotEmpty)
-                Column(
-                  children: const [],
-                )
-              else
+                16.height,
                 const Text(
-                  "Não foi possível carregar o histórico",
+                  "Histórico de previsões",
                   style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.black54,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: appColorPrimary,
                   ),
                 ),
+                const Divider(
+                  color: appColorPrimary,
+                  thickness: 1,
+                ),
+                8.height,
+                if (pastWeathers.isNotEmpty)
+                  Column(
+                    children: pastWeathers
+                        .map(
+                          (e) => weatherPast(e),
+                        )
+                        .toList(),
+                  )
+                else
+                  const Text(
+                    "Não foi possível carregar o histórico",
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.black54,
+                    ),
+                  ),
+              ],
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget weatherPast(Weather weather) {
+    String date = DateFormat('dd/MM/yyyy').format(DateTime.parse(weather.dia));
+
+    return Card(
+        child: Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      date,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                        color: appColorPrimary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Máxima",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.black54,
+                      ),
+                    ),
+                    Text(
+                      "${weather.maxima}°C",
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  const Text(
+                    "Mínima",
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.black54,
+                    ),
+                  ),
+                  Text(
+                    "${weather.minima}°C",
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    ));
   }
 }

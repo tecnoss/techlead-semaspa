@@ -279,9 +279,9 @@ class WeatherToday extends StatelessWidget {
                               size: 12,
                             ),
                             4.width,
-                            const Text(
-                              "05:54:00",
-                              style: TextStyle(
+                            Text(
+                              weather.horaNascerDoSol,
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 10,
                               ),
@@ -321,9 +321,9 @@ class WeatherToday extends StatelessWidget {
                               size: 10,
                             ),
                             4.width,
-                            const Text(
-                              "06:03:00",
-                              style: TextStyle(
+                            Text(
+                              weather.horaPorDoSol,
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,
                               ),
