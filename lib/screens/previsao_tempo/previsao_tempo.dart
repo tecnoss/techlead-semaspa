@@ -1,8 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:semasma/screens/previsao_tempo/card_data.dart';
 import 'package:semasma/screens/previsao_tempo/model/city_data_model.dart';
+import 'package:semasma/screens/previsao_tempo/model/weather_model.dart';
+import 'package:semasma/screens/previsao_tempo/widgets/weather_today.dart';
 import 'package:semasma/utils/app_colors.dart';
 import 'package:semasma/widgets/leading.dart';
 import 'package:semasma/widgets/title_app_bar.dart';
@@ -17,6 +19,12 @@ class PrevisaoTempo extends StatefulWidget {
 }
 
 class _PrevisaoTempoState extends State<PrevisaoTempo> {
+  final dio = Dio();
+  final String baseUrl =
+      "http://appmobile-integracao.semas.pa.gov.br:453/regiao/";
+  Weather? weatherToday;
+  List<Weather> pastWeathers = [];
+
   List<CityData> cityData = [
     CityData(id: 1, regiao: "Região Metropolitana de Belém", label: "Belém"),
     CityData(id: 5, regiao: "Marabá", label: "Marabá"),
@@ -27,24 +35,59 @@ class _PrevisaoTempoState extends State<PrevisaoTempo> {
   String? formattedDate;
 
   CityData? selectedCity;
+  bool loading = false;
 
   @override
   void initState() {
     super.initState();
-    selectedCity = cityData[0];
     getDate();
+    updateValue(cityData[0]);
   }
 
   void getDate() async {
-    // await initializeDateFormatting('pt_BR', '');
     DateTime now = DateTime.now();
-
     setState(
       () => {
         formattedDate =
             DateFormat('EEEE, dd \'de\' MMMM \'de\' y', 'pt_BR').format(now),
       },
     );
+  }
+
+  Future<void> updateValue(CityData value) async {
+    if (value.id == selectedCity?.id) {
+      return;
+    }
+
+    setState(() {
+      selectedCity = value;
+      loading = true;
+    });
+
+    await getCityData();
+
+    setState(() {
+      loading = false;
+    });
+    debugPrint("Mudou valor");
+  }
+
+  Future<void> getCityData() async {
+    DateTime now = DateTime.now();
+    String date = DateFormat('yyyy-MM-dd').format(now);
+
+    try {
+      final response = await dio.get(baseUrl + selectedCity!.id.toString());
+      response.data["response"].forEach((element) {
+        if (element["dia"].toString().contains(date)) {
+          weatherToday = Weather.fromJson(element);
+        } else {
+          pastWeathers.add(Weather.fromJson(element));
+        }
+      });
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   @override
@@ -128,9 +171,7 @@ class _PrevisaoTempoState extends State<PrevisaoTempo> {
                         child: DropdownButton(
                           value: selectedCity,
                           onChanged: ((value) {
-                            setState(() {
-                              selectedCity = value;
-                            });
+                            updateValue(value as CityData);
                           }),
                           underline: Container(),
                           hint: const Text(
@@ -159,324 +200,32 @@ class _PrevisaoTempoState extends State<PrevisaoTempo> {
                 ],
               ),
               16.height,
-              GridView.count(
-                crossAxisCount: 2,
-                crossAxisSpacing: 8,
-                mainAxisSpacing: 8,
-                childAspectRatio: 4 / 5,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  CardData(
-                    data: Column(
-                      children: [
-                        const Text(
-                          "TEMPERATURA",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                            color: appColorPrimary,
-                          ),
-                        ),
-                        const Divider(
-                          color: appColorPrimary,
-                          thickness: 1,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              children: const [
-                                Text(
-                                  "30°C",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  "Máxima",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black54,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: const [
-                                Text(
-                                  "24°C",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  "Mínima",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black54,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        const Divider(
-                          color: appColorPrimary,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Flexible(
-                              child: Text(
-                                "Umidade relativa do ar",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black54,
-                                ),
-                              ),
-                            ),
-                            24.width,
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
-                                Icon(
-                                  Icons.expand_less,
-                                  size: 16,
-                                ),
-                                Text(
-                                  "98%",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.expand_more,
-                                  size: 16,
-                                ),
-                                Text(
-                                  "55%",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+              if (loading)
+                const SizedBox(
+                  height: 200,
+                  child: Center(
+                    child: CircularProgressIndicator(),
                   ),
-                  CardData(
-                    data: Column(
-                      children: [
-                        const Text(
-                          "MANHÃ",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                            color: appColorPrimary,
-                          ),
-                        ),
-                        const Divider(
-                          color: appColorPrimary,
-                          thickness: 1,
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Image.asset(
-                              "assets/icons/previsao_tempo/less_cloud.png",
-                              height: 64,
-                            ),
-                            const Text("Poucas nuvens."),
-                          ],
-                        ),
-                      ],
-                    ),
+                )
+              else ...[
+                const Text(
+                  "Previsão para hoje",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: appColorPrimary,
                   ),
-                  CardData(
-                    data: Column(
-                      children: [
-                        const Text(
-                          "TARDE",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                            color: appColorPrimary,
-                          ),
-                        ),
-                        const Divider(
-                          color: appColorPrimary,
-                          thickness: 1,
-                        ),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: const [
-                              Image(
-                                image: AssetImage(
-                                    "assets/icons/previsao_tempo/thunder.png"),
-                                height: 64,
-                              ),
-                              Flexible(
-                                child: Text(
-                                    "Parcialmente nublado e nublado com chuvas "
-                                    "e trovoadas no final do período.",
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.black54,
-                                    )),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  CardData(
-                    data: Column(
-                      children: [
-                        const Text(
-                          "NOITE",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                            color: appColorPrimary,
-                          ),
-                        ),
-                        const Divider(
-                          color: appColorPrimary,
-                          thickness: 1,
-                        ),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: const [
-                              Image(
-                                image: AssetImage(
-                                    "assets/icons/previsao_tempo/heavy-rain.png"),
-                                height: 64,
-                              ),
-                              Flexible(
-                                child: Text(
-                                  "Parcialmente nublado a poucas nuvens "
-                                  "com possibilidade de chuvas rápidas e isoladas no "
-                                  "início do período.",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black54,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              16.height,
-              Container(
-                decoration: BoxDecoration(
-                  color: appColorPrimary,
-                  borderRadius: BorderRadius.circular(8),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            "assets/icons/previsao_tempo/sunrise.png",
-                            height: 36,
-                          ),
-                          8.width,
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "NASCER DO SOL:",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.watch_later,
-                                    color: Colors.white,
-                                    size: 12,
-                                  ),
-                                  4.width,
-                                  const Text(
-                                    "05:54:00",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 10,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            "assets/icons/previsao_tempo/sunset.png",
-                            height: 36,
-                          ),
-                          8.width,
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "PÔR DO SOL:",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.watch_later,
-                                    color: Colors.white,
-                                    size: 10,
-                                  ),
-                                  4.width,
-                                  const Text(
-                                    "06:03:00",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ).paddingSymmetric(vertical: 8),
-              ),
+                const Divider(
+                  color: appColorPrimary,
+                  thickness: 2,
+                ),
+                8.height,
+                weatherToday != null
+                    ? WeatherToday(weather: weatherToday!)
+                    : Container(),
+              ],
+              16.height,
             ],
           ),
         ),
