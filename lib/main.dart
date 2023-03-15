@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
+import 'package:semasma/screens/about_semas/about_semas_screen.dart';
 import 'package:semasma/screens/app_splash_screen.dart';
 import 'package:semasma/screens/denuncia_ouvidoria/repository/municipio_provider.dart';
 import 'package:semasma/screens/denuncia_ouvidoria/repository/report_provider.dart';
@@ -30,6 +32,8 @@ import 'utils/app_constant.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initialize();
+  await initializeDateFormatting('pt_BR', null);
+
   runApp(const MyApp());
 }
 
@@ -56,6 +60,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        locale: const Locale('pt', 'BR'),
         debugShowCheckedModeBanner: false,
         title: '$appName${!isMobile ? ' ${platformName()}' : ''}',
         theme: AppThemeData.lightTheme,
@@ -69,6 +74,10 @@ class MyApp extends StatelessWidget {
             case '/home':
               return MaterialPageRoute(
                 builder: (context) => const HomeScreen(),
+              );
+            case '/about_semas':
+              return MaterialPageRoute(
+                builder: (context) => const AboutSemasScreen(),
               );
             case '/previsao_tempo':
               return MaterialPageRoute(

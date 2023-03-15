@@ -15,39 +15,52 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final List _itens = [
     {
+      "id": "conheca-semas",
       "icon": "assets/icons/home/semas.png",
       "title": "Conheça a SEMAS",
-      "route": "/conheca_semas",
+      "route": "/about_semas",
     },
-    // {
-    //   "icon": "assets/icons/home/previsao_tempo.png",
-    //   "title": "Previsão do Tempo",
-    //   "route": "/previsao_tempo",
-    // },
     {
+      "id": "previsao-tempo",
+      "icon": "assets/icons/home/previsao_tempo.png",
+      "title": "Previsão do Tempo",
+      "route": "/previsao_tempo",
+    },
+    {
+      "id": "redes-sociais",
       "icon": "assets/icons/home/redes_sociais.png",
       "title": "Redes Sociais",
       "route": "/redes_sociais",
     },
     {
+      "id": "processo-simlam",
       "icon": "assets/icons/home/simlam.png",
       "title": "Consultar Processos SIMLAM",
       "route": "/processo_simlam",
     },
     {
+      "id": "portal-transparencia",
       "icon": "assets/icons/home/portal_transparencia.png",
       "title": "Consultar Portal da Transparência",
       "route": "/portal_transparencia",
     },
     {
+      "id": "links-uteis",
       "icon": "assets/icons/home/links_uteis.png",
       "title": "Acessar Links Úteis",
       "route": "/links_uteis",
     },
     {
+      "id": "denuncia-ouvidoria",
       "icon": "assets/icons/home/denuncia_ouvidoria.png",
       "title": "Realizar Denúncias na Ouvidoria",
       "route": "/denuncia_ouvidoria",
+    },
+    {
+      "id": "portal-atos-autorizativos",
+      "icon": "assets/icons/home/portal_atos_autorizativos.png",
+      "title": "Portal dos Atos Autorizativos",
+      "route": "/",
     },
     // {
     //   "icon": "assets/icons/home/catis.png",
@@ -55,6 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
     //   "route": "/chamado_catis",
     // },
     {
+      "id": "faqs",
       "icon": "assets/icons/home/faqs.png",
       "title": "FAQs",
       "route": "/faqs",
@@ -78,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const ScreenTitle(title: "SEMAS"),
+          const ScreenTitle(title: "Área Inicial"),
           const Padding(
             padding: EdgeInsets.only(left: 16.0),
             child: Text(
@@ -101,15 +115,19 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
-                    if (index == 0) {
-                      _launchURL(
-                          "https://www.semas.pa.gov.br/institucional/o-que-e-a-sema/");
-                    } else if (index == 2) {
+                    if (_itens[index]["id"] == "processo-simlam") {
                       _launchURL(
                           "https://monitoramento.semas.pa.gov.br/simlam/index.htm");
-                    } else if (index == 6) {
+                    } else if (_itens[index]["id"] == "faqs") {
                       _launchURL(
                           "https://www.semas.pa.gov.br/transparencia-publica/perguntas-frequentes/");
+                    } else if (_itens[index]["id"] ==
+                        "portal-atos-autorizativos") {
+                      _launchURL(
+                          "https://portal-dos-atos-autorizativos.semas.pa.gov.br/");
+                    } else if (_itens[index]["id"] == "portal-transparencia") {
+                      _launchURL(
+                          "http://portaldatransparencia.semas.pa.gov.br/#/visao-publica");
                     } else {
                       Navigator.pushNamed(context, _itens[index]["route"]);
                     }
