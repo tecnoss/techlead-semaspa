@@ -12,9 +12,10 @@ class AboutSemasScreen extends StatelessWidget {
         title: const TitleAppBar(title: 'Sobre a SEMAS'),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -46,7 +47,7 @@ class AboutSemasScreen extends StatelessWidget {
               ),
             ],
           ),
-        ).expand(),
+        ),
       ),
     );
   }
