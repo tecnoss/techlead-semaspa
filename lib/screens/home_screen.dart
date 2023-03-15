@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
     {
       "id": "portal-atos-autorizativos",
       "icon": "assets/icons/home/portal_atos_autorizativos.png",
-      "title": "Portald os Atos Autorizativos",
+      "title": "Portal dos Atos Autorizativos",
       "route": "/",
     },
     // {
@@ -118,13 +118,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     if (_itens[index]["id"] == "processo-simlam") {
                       _launchURL(
                           "https://monitoramento.semas.pa.gov.br/simlam/index.htm");
-                    } else if (_itens[index]["id"] == "portal-transparencia") {
+                    } else if (_itens[index]["id"] == "faqs") {
                       _launchURL(
                           "https://www.semas.pa.gov.br/transparencia-publica/perguntas-frequentes/");
                     } else if (_itens[index]["id"] ==
                         "portal-atos-autorizativos") {
                       _launchURL(
                           "https://portal-dos-atos-autorizativos.semas.pa.gov.br/");
+                    } else if (_itens[index]["id"] == "portal-transparencia") {
+                      _launchURL(
+                          "http://portaldatransparencia.semas.pa.gov.br/#/visao-publica");
                     } else {
                       Navigator.pushNamed(context, _itens[index]["route"]);
                     }
