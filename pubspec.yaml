@@ -1,7 +1,7 @@
 name: semasma
 description: A new Flutter project.
 publish_to: "none"
-version: 1.0.0+3
+version: 1.0.0+5
 
 environment:
   sdk: ">=2.18.4 <3.0.0"
@@ -44,7 +44,7 @@ dev_dependencies:
 flutter_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/images/icon1.png"
+  image_path: "assets/images/icon2.png"
 
 flutter:
   uses-material-design: true

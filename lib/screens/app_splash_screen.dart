@@ -27,7 +27,7 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
         fit: StackFit.expand,
         children: [
           const Image(
-            image: AssetImage('assets/images/splash.jpg'),
+            image: AssetImage('assets/images/splash.png'),
             fit: BoxFit.cover,
           ),
           Positioned(
