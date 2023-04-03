@@ -25,8 +25,8 @@ class MapScreen extends StatefulWidget {
 class MapScreenState extends State<MapScreen> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
-  final ValueNotifier<LatLng> _center =
-      ValueNotifier(const LatLng(-1.3833703, -48.4761885));
+  late ValueNotifier<LatLng> _center;
+
   Address? _address;
 
   void _showAddressDialog() {
@@ -92,7 +92,10 @@ class MapScreenState extends State<MapScreen> {
                           );
 
                       Navigator.of(context).pop();
-                      Navigator.of(context).pop();
+                      Navigator.of(context).pop(LatLng(
+                        _address?.lat ?? 0,
+                        _address?.lng ?? 0,
+                      ));
                     },
                     text: "Prosseguir",
                   ),
@@ -186,6 +189,9 @@ class MapScreenState extends State<MapScreen> {
 
   @override
   void initState() {
+    _center = ValueNotifier<LatLng>(
+      LatLng(widget.coords["lat"], widget.coords["long"]),
+    );
     _centralizarMarcador();
     super.initState();
   }

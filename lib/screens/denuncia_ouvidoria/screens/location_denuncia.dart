@@ -24,6 +24,7 @@ class LocationDenunciaScreen extends StatefulWidget {
 
 class _LocationDenunciaScreenState extends State<LocationDenunciaScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  LatLng? position;
 
   List<RadioModel> sampleData = <RadioModel>[
     RadioModel(true, 'Urbano'),
@@ -31,6 +32,8 @@ class _LocationDenunciaScreenState extends State<LocationDenunciaScreen> {
   ];
 
   String? dropdownValue;
+
+  bool _isLoading = false;
 
   Municipio? _selectedCity;
 
@@ -41,16 +44,14 @@ class _LocationDenunciaScreenState extends State<LocationDenunciaScreen> {
   final TextEditingController _bairroController = TextEditingController();
   final TextEditingController _refController = TextEditingController();
   final TextEditingController _carController = TextEditingController();
-  double? _lat;
-  double? _long;
 
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _determinePosition().then((value) {
-        _lat = value.latitude;
-        _long = value.longitude;
+        position = LatLng(value.latitude, value.longitude);
       }).onError((error, stackTrace) {
         debugPrint(error.toString());
       });
@@ -85,11 +86,40 @@ class _LocationDenunciaScreenState extends State<LocationDenunciaScreen> {
 
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
+      Fluttertoast.showToast(
+        msg:
+            'A localização está permanentemente desativada para este aplicativo. Por favor, ative manualmente a localização para continuar.',
+        toastLength: Toast.LENGTH_LONG,
+        // gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 5,
+        // backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
 
     return await Geolocator.getCurrentPosition();
+  }
+
+  Future<LatLng?> _getCurrentLocation() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      Position p = await _determinePosition();
+      LatLng lt = LatLng(p.latitude, p.longitude);
+      return lt;
+    } catch (e) {
+      return null;
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -187,25 +217,45 @@ class _LocationDenunciaScreenState extends State<LocationDenunciaScreen> {
                 ),
                 16.height,
                 Center(
-                  child: IconButton(
-                    iconSize: 100,
-                    onPressed: () async {
-                      final LatLng? result = await Navigator.of(context)
-                          .pushNamed("/denuncia_ouvidoria/map", arguments: {
-                        'lat': _lat ?? -1.3833703,
-                        'long': _long ?? -48.4795403,
-                      }) as LatLng?;
+                  child: _isLoading
+                      ? const SizedBox(
+                          height: 100,
+                          width: 100,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : IconButton(
+                          iconSize: 100,
+                          onPressed: () async {
+                            if (position == null) {
+                              LatLng? p = await _getCurrentLocation();
+                              if (p == null) {
+                                return;
+                              }
+                              position = p;
+                            }
 
-                      if (result == null) {
-                        return;
-                      }
-                      _latController.text = result.latitude.toString();
-                      _longController.text = result.longitude.toString();
-                    },
-                    icon: SvgPicture.asset(
-                      'assets/icons/ouvidoria/map.svg',
-                    ),
-                  ),
+                            final LatLng? result = await Navigator.of(context)
+                                .pushNamed("/denuncia_ouvidoria/map",
+                                    arguments: {
+                                  'lat': position!.latitude,
+                                  'long': position!.longitude,
+                                }) as LatLng?;
+
+                            if (result == null) {
+                              return;
+                            } else {
+                              position = result;
+                              _latController.text = result.latitude.toString();
+                              _longController.text =
+                                  result.longitude.toString();
+                            }
+                          },
+                          icon: SvgPicture.asset(
+                            'assets/icons/ouvidoria/map.svg',
+                          ),
+                        ),
                 ),
                 16.height,
                 const Text(
