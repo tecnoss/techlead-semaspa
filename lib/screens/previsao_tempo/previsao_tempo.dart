@@ -64,6 +64,8 @@ class _PrevisaoTempoState extends State<PrevisaoTempo> {
       loading = true;
     });
 
+    pastWeathers = [];
+
     await getCityData();
 
     setState(() {
