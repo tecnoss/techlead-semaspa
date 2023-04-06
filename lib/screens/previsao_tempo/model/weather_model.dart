@@ -48,7 +48,7 @@ class Weather {
       umidadeRelativaMaxima: json['umidade_relativa_maxima'],
       horaPorDoSol: json['hora_por_do_sol'],
       horaNascerDoSol: json['hora_nascer_do_sol'],
-      previsao: json['previsao'],
+      previsao: json['previsao'] ?? '',
       icone: json['icone'],
       previsaoManha: json['previsao_manha'],
       iconeManha: json['icone_manha'],
