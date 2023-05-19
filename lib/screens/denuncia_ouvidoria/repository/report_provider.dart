@@ -133,7 +133,18 @@ class ReportProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  String getbydatetime() {
+    DateTime now = DateTime.now();
+    String date = now.toString().split('.')[0];
+    date = date.replaceAll('-', '');
+    date = date.replaceAll(':', '');
+    date = date.replaceAll(' ', '');
+    return date;
+  }
+
   Future<void> sendEmail() async {
+    String id = getbydatetime();
+
     String to =
         "aisc@semas.pa.gov.br;ouvidoria@semas.pa.gov.br;semasouvidoria@gmail.com";
 
@@ -142,7 +153,7 @@ class ReportProvider extends ChangeNotifier {
     }
 
     String subject =
-        "Denúncia de ${this.subject!.escopo} - ${this.subject!.name}";
+        "$id - Denúncia de ${this.subject!.escopo} - ${this.subject!.name}";
     String format = "Html";
 
     // Criar um objeto MultipartRequest
