@@ -134,7 +134,13 @@ class ReportProvider extends ChangeNotifier {
   }
 
   Future<void> sendEmail() async {
-    String to = "ouvidoria@semas.pa.gov.br";
+    String to =
+        "aisc@semas.pa.gov.br;ouvidoria@semas.pa.gov.br;semasouvidoria@gmail.com";
+
+    if (email != null) {
+      to += ";$email";
+    }
+
     String subject =
         "Denúncia de ${this.subject!.escopo} - ${this.subject!.name}";
     String format = "Html";
