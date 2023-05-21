@@ -146,7 +146,7 @@ class ReportProvider extends ChangeNotifier {
     String id = getbydatetime();
 
     String to =
-        "aisc@semas.pa.gov.br;ouvidoria@semas.pa.gov.br;semasouvidoria@gmail.com";
+        "aisc@semas.pa.gov.br;ouvidoria@semas.pa.gov.br;semasouvidoria@gmail.com;aisc.semaspa@gmail.com";
 
     if (email != null) {
       to += ";$email";
